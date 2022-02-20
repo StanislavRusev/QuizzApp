@@ -15,6 +15,7 @@ const val NAME = "name"
 const val PASSWORD = "password"
 const val POINTS = "points"
 const val DATE = "date"
+const val PLAYED = "gamesPlayedToday"
 
 class AuthenticationRepository (private val retrofit: RetrofitApi) {
     private var _currentUser: User? = null
@@ -72,6 +73,35 @@ class AuthenticationRepository (private val retrofit: RetrofitApi) {
             }
 
             override fun onFailure(call: Call<User>, t: Throwable) {
+                println(t.toString())
+                setErrorStatus()
+            }
+
+        })
+    }
+
+    fun updateLastPlayed() {
+        val body = mutableMapOf<String, String>()
+        val currentDate: String = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(Date())
+        if(_currentUser?.date == currentDate) {
+            _currentUser?.gamesPlayedToday = _currentUser?.gamesPlayedToday?.inc()!!
+        } else {
+            _currentUser?.date  = currentDate
+            _currentUser?.gamesPlayedToday = 1
+        }
+
+        body.put(NAME, currentUser?.name.toString())
+        body.put(DATE, currentDate)
+        body.put(PLAYED, _currentUser?.gamesPlayedToday.toString())
+
+        val requestCall = retrofit.updateLastPlayed(body)
+
+        requestCall.enqueue(object: Callback<Unit> {
+            override fun onResponse(call: Call<Unit>, response: Response<Unit>) {
+
+            }
+
+            override fun onFailure(call: Call<Unit>, t: Throwable) {
                 println(t.toString())
                 setErrorStatus()
             }

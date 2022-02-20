@@ -72,6 +72,13 @@ mongoClient.connect(url, function(err, db) {
             res.status(200).send(JSON.stringify(result));
         }) 
     })
+
+    app.post("/updateLastPlayed", function(req, res) {
+        var newDate = { $set: {date: req.body.date, gamesPlayedToday: parseInt(req.body.gamesPlayedToday)}}
+        collection.updateOne({ name: req.body.name }, newDate, function(err, result) {
+            res.status(200).send();
+        })
+    })
 })
 
 app.listen(8080, () => {

@@ -22,6 +22,7 @@ class GameFragment : Fragment() {
     private val gameViewModel: GameViewModel by sharedViewModel()
     private lateinit var countDownTimer: CountDownTimer
     private var timeLeftInMillis: Long = COUNTDOWN
+    private var canEarnPoints: Boolean = true
 
 
     override fun onCreateView(
@@ -34,6 +35,8 @@ class GameFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        authenticationViewModel.updateLastPlayed()
+        canEarnPoints = authenticationViewModel.canEarnPoints()
         setupQuestion()
 
         binding.answer1.setOnClickListener {
@@ -65,10 +68,13 @@ class GameFragment : Fragment() {
     }
 
     private fun chooseAnswer(answer: String) {
-        if(gameViewModel.isRightAnswer(answer))
+        if(gameViewModel.isRightAnswer(answer)) {
             Toast.makeText(context, "Correct", Toast.LENGTH_SHORT).show()
-        else
+            if(canEarnPoints)
+                gameViewModel.addPoints()
+        } else {
             Toast.makeText(context, "Incorrect", Toast.LENGTH_SHORT).show()
+        }
         if(!gameViewModel.toNextQuestion()) {
             Toast.makeText(context, "You got " + gameViewModel.earnedPoints + " points", Toast.LENGTH_SHORT).show()
             authenticationViewModel.updatePoints(gameViewModel.earnedPoints)

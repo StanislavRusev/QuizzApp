@@ -34,11 +34,11 @@ class GameViewModel (private val repository: GameRepository): ViewModel() {
     }
 
     fun isRightAnswer(answer: String): Boolean {
-        if(currentQuestions[numberOfCurrentQuestion].answer == answer) {
-            repository.addPoints()
-            return true
-        }
-        return false
+        return currentQuestions[numberOfCurrentQuestion].answer == answer
+    }
+
+    fun addPoints() {
+        repository.addPoints()
     }
 
 }

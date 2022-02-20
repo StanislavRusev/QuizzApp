@@ -21,4 +21,7 @@ interface RetrofitApi {
 
     @GET("users")
     fun getUsers(): Call<List<User>>
+
+    @POST("updateLastPlayed")
+    fun updateLastPlayed(@Body map: Map<String, String>): Call<Unit>
 }

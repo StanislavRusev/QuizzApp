@@ -38,4 +38,12 @@ class AuthenticationViewModel (private val repository: AuthenticationRepository)
         repository.getAllUsers()
     }
 
+    fun updateLastPlayed() {
+        repository.updateLastPlayed()
+    }
+
+    fun canEarnPoints(): Boolean {
+        return currentUser?.gamesPlayedToday!! <= 3
+    }
+
 }
