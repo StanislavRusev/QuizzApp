@@ -59,6 +59,10 @@ class GameFragment : Fragment() {
             bonusTime()
         }
 
+        binding.fifty.setOnClickListener {
+            bonusFifty()
+        }
+
     }
 
     override fun onDestroyView() {
@@ -92,10 +96,15 @@ class GameFragment : Fragment() {
         binding.question.text = gameViewModel.getQuestion()
         val distractors = gameViewModel.getDistractors()
         distractors.shuffle()
+        binding.answer1.visibility = View.VISIBLE
+        binding.answer2.visibility = View.VISIBLE
+        binding.answer3.visibility = View.VISIBLE
+        binding.answer4.visibility = View.VISIBLE
         binding.answer1.text = distractors[0]
         binding.answer2.text = distractors[1]
         binding.answer3.text = distractors[2]
         binding.answer4.text = distractors[3]
+        binding.fifty.visibility = View.VISIBLE
 
     }
 
@@ -138,6 +147,29 @@ class GameFragment : Fragment() {
             timeLeftInMillis += COUNTDOWN
             startCountDown()
             updateTimer()
+        }
+    }
+
+    private fun bonusFifty() {
+        if(authenticationViewModel.currentUser?.points!! < 2) {
+            Toast.makeText(context, "Not enough points", Toast.LENGTH_SHORT).show()
+        } else {
+            authenticationViewModel.updatePoints(-2)
+            val toHide = gameViewModel.getBonusFifty()
+            when(toHide[0]) {
+                binding.answer1.text -> binding.answer1.visibility = View.INVISIBLE
+                binding.answer2.text -> binding.answer2.visibility = View.INVISIBLE
+                binding.answer3.text -> binding.answer3.visibility = View.INVISIBLE
+                binding.answer4.text -> binding.answer4.visibility = View.INVISIBLE
+            }
+            when(toHide[1]) {
+                binding.answer1.text -> binding.answer1.visibility = View.INVISIBLE
+                binding.answer2.text -> binding.answer2.visibility = View.INVISIBLE
+                binding.answer3.text -> binding.answer3.visibility = View.INVISIBLE
+                binding.answer4.text -> binding.answer4.visibility = View.INVISIBLE
+            }
+            binding.fifty.visibility = View.INVISIBLE
+
         }
     }
 

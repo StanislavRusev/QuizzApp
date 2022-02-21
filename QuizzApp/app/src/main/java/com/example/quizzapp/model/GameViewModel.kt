@@ -41,4 +41,12 @@ class GameViewModel (private val repository: GameRepository): ViewModel() {
         repository.addPoints()
     }
 
+    fun getBonusFifty(): MutableList<String> {
+        val distractors = currentQuestions[numberOfCurrentQuestion].distractors.toMutableList()
+        distractors.remove(currentQuestions[numberOfCurrentQuestion].answer)
+        distractors.shuffle()
+        distractors.removeLast()
+        return distractors
+    }
+
 }

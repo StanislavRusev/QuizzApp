@@ -31,7 +31,7 @@ class GameRepository (private val retrofit: RetrofitApi) {
                 response: Response<List<Question>>
             ) {
                 if(response.isSuccessful) {
-                    pointPerQuestion = 2
+                    pointPerQuestion = 3
                     _earnedPoints = 0
                     _numberOfCurrentQuestion = 0
                     _currentQuestions = response.body()!!
