@@ -10,13 +10,20 @@ import androidx.navigation.fragment.findNavController
 import com.example.quizzapp.databinding.FragmentLoginBinding
 import com.example.quizzapp.model.AuthenticationViewModel
 import com.example.quizzapp.model.Status
+import com.facebook.CallbackManager
+import com.facebook.FacebookCallback
+import com.facebook.FacebookException
+import com.facebook.login.LoginResult
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import android.content.Intent
+import com.facebook.login.LoginManager
 
 
 class LoginFragment : Fragment() {
     private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!
     private val viewModel: AuthenticationViewModel by sharedViewModel()
+    private lateinit var callbackManager: CallbackManager
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -60,6 +67,23 @@ class LoginFragment : Fragment() {
                 }
             })
 
+        binding.loginButton.fragment = this
+        callbackManager = CallbackManager.Factory.create();
+        binding.loginButton.registerCallback(callbackManager, object: FacebookCallback<LoginResult> {
+            override fun onCancel() {
+                println("canceled")
+            }
+
+            override fun onError(error: FacebookException) {
+                println("error")
+            }
+
+            override fun onSuccess(result: LoginResult) {
+                println("success")
+                LoginManager.getInstance().logOut()
+            }
+        })
+
     }
 
     private fun invalidData() {
@@ -71,6 +95,12 @@ class LoginFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        callbackManager.onActivityResult(requestCode, resultCode, data)
+        super.onActivityResult(requestCode, resultCode, data)
     }
 
 }

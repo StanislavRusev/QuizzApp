@@ -6,4 +6,10 @@
     <string name="username">Username: %1$s</string>
     <string name="points">Points: %1$d</string>
     <string name="title">Title: %1$s</string>
+
+    <string name="facebook_app_id">378184364307458</string>
+    <string name="fb_login_protocol_scheme">fb378184364307458</string>
+    <string name="facebook_client_token">1c4ddaee3d0a3a2a2ba8695166ad2362</string>
+
+
 </resources>

@@ -61,4 +61,7 @@ dependencies {
     implementation "io.insert-koin:koin-androidx-navigation:$koin_version"
     implementation "io.insert-koin:koin-androidx-compose:$koin_version"
 
+    //Facebook
+    implementation 'com.facebook.android:facebook-android-sdk:latest.release'
+
 }

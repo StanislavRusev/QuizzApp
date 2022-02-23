@@ -2,8 +2,9 @@ package com.example.quizzapp
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.example.quizzapp.services.User
-import org.koin.android.ext.android.inject
+import com.facebook.FacebookSdk;
+import com.facebook.appevents.AppEventsLogger;
+
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
