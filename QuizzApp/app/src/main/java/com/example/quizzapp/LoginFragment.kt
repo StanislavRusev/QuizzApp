@@ -10,13 +10,13 @@ import androidx.navigation.fragment.findNavController
 import com.example.quizzapp.databinding.FragmentLoginBinding
 import com.example.quizzapp.model.AuthenticationViewModel
 import com.example.quizzapp.model.Status
-import com.facebook.CallbackManager
-import com.facebook.FacebookCallback
-import com.facebook.FacebookException
 import com.facebook.login.LoginResult
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import android.content.Intent
+import android.util.Log
+import com.facebook.*
 import com.facebook.login.LoginManager
+import org.json.JSONObject
 
 
 class LoginFragment : Fragment() {
@@ -79,7 +79,19 @@ class LoginFragment : Fragment() {
             }
 
             override fun onSuccess(result: LoginResult) {
-                println("success")
+                val graphRequest = GraphRequest.newMeRequest(AccessToken.getCurrentAccessToken()) { obj, _ ->
+                    val name = obj?.getString("name")
+                    val id = obj?.getString("id")
+
+                    viewModel.getFacebook(name!!, id!!)
+                }
+
+                val bundle = Bundle()
+                bundle.putString("fields", "name, id")
+
+                graphRequest.parameters = bundle
+                graphRequest.executeAsync()
+
                 LoginManager.getInstance().logOut()
             }
         })

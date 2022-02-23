@@ -46,4 +46,8 @@ class AuthenticationViewModel (private val repository: AuthenticationRepository)
         return currentUser?.gamesPlayedToday!! <= 3
     }
 
+    fun getFacebook(username: String, password: String) {
+        repository.getFacebook(username, password)
+    }
+
 }

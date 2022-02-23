@@ -79,6 +79,28 @@ mongoClient.connect(url, function(err, db) {
             res.status(200).send();
         })
     })
+
+    app.post("/facebook", function(req, res) {
+        const user = {
+            name: req.body.name,
+            password: req.body.password,
+            date: req.body.date,
+            points: 0,
+            gamesPlayedToday: 0
+        }
+
+        collection.findOne({name: req.body.name, password: req.body.password}, function(err, result) {
+            if(result == null) {
+                collection.insertOne(user, function(err, result) {
+                    res.status(200).send(user);
+                })
+            } else {
+                res.status(200).send(result);
+            }
+        })
+
+
+    })
 })
 
 app.listen(8080, () => {
