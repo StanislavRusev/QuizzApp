@@ -9,6 +9,8 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
+const val POINTS_EASY_BIOLOGY = 3
+
 class GameRepository (private val retrofit: RetrofitApi) {
     private var _status = MutableLiveData<Status>()
     private var _numberOfCurrentQuestion: Int = 0
@@ -23,7 +25,7 @@ class GameRepository (private val retrofit: RetrofitApi) {
     private var pointPerQuestion: Int = 0
 
     fun setupEasyBiologyQuestions() {
-        val requestCall = retrofit.getQuestions()
+        val requestCall = retrofit.getEasyBiology()
 
         requestCall.enqueue(object: Callback<List<Question>> {
             override fun onResponse(
@@ -31,7 +33,7 @@ class GameRepository (private val retrofit: RetrofitApi) {
                 response: Response<List<Question>>
             ) {
                 if(response.isSuccessful) {
-                    pointPerQuestion = 3
+                    pointPerQuestion = POINTS_EASY_BIOLOGY
                     _earnedPoints = 0
                     _numberOfCurrentQuestion = 0
                     _currentQuestions = response.body()!!

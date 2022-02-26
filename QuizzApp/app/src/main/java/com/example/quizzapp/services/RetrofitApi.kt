@@ -13,8 +13,11 @@ interface RetrofitApi {
     @POST("login")
     fun loginUser(@Body map: Map<String, String>): Call<User>
 
-    @GET("question")
-    fun getQuestions(): Call<List<Question>>
+    @GET("easyBiology")
+    fun getEasyBiology(): Call<List<Question>>
+
+    @GET("hardBiology")
+    fun getHardBiology(): Call<List<Question>>
 
     @POST("update")
     fun updatePoints(@Body map: Map<String, String>): Call<Unit>

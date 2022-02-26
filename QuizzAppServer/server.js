@@ -10,7 +10,8 @@ mongoClient.connect(url, function(err, db) {
 
     const myDb = db.db("testdb");
     const collection = myDb.collection("users");
-    const questionCollection = myDb.collection("questions");
+    const easyBiologyCollection = myDb.collection("questions");
+    const hardBiologyCollection = myDb.collection("hard");
 
     app.post("/register", function(req, res) {
         const user = {
@@ -53,9 +54,16 @@ mongoClient.connect(url, function(err, db) {
         })
     })
 
-    app.get("/question", function(req, res) {
-        questionCollection.find({}, {projection: {_id: 0, question: 1, distractors: 1, answer: 1 }}).toArray(function(err, result) {
-            var resultQuestions = getQuestions(51, result);
+    app.get("/easyBiology", function(req, res) {
+        easyBiologyCollection.find({}, {projection: {_id: 0, question: 1, distractors: 1, answer: 1 }}).toArray(function(err, result) {
+            var resultQuestions = getQuestions(result.length, result, 10);
+            res.status(200).send(JSON.stringify(resultQuestions));
+        })
+    })
+
+    app.get("/hardBiology", function(req, res) {
+        hardBiologyCollection.find({}, {projection: {_id: 0, question: 1, distractors: 1, answer: 1 }}).toArray(function(err, result) {
+            var resultQuestions = getQuestions(result.length, result, 5);
             res.status(200).send(JSON.stringify(resultQuestions));
         })
     })
@@ -111,11 +119,11 @@ function randomNumberGenerate(max) {
     return Math.floor(Math.random() * (max));
 }
 
-function getQuestions(max, questions) {
+function getQuestions(max, questions, totalCount) {
     var indexes = new Set();
     var result = new Array();
 
-    while(indexes.size != 10) {
+    while(indexes.size != totalCount) {
         indexes.add(randomNumberGenerate(max));
     }
 
