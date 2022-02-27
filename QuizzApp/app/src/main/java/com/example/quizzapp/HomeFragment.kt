@@ -1,12 +1,12 @@
 package com.example.quizzapp
 
-import android.content.Intent
+import android.app.Dialog
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.result.contract.ActivityResultContracts
+import android.widget.Button
 import androidx.navigation.fragment.findNavController
 import com.example.quizzapp.databinding.FragmentHomeBinding
 import com.example.quizzapp.model.AuthenticationViewModel
@@ -38,7 +38,7 @@ class HomeFragment : Fragment() {
         }
 
         binding.playGame.setOnClickListener {
-            gameViewModel.setupEasyBiologyQuestions()
+            gameModeDialogBuilder()
         }
 
         binding.leaderboard.setOnClickListener {
@@ -88,6 +88,25 @@ class HomeFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun gameModeDialogBuilder() {
+        val dialog = Dialog(requireContext())
+        dialog.setContentView(R.layout.pick_gamemode)
+        dialog.findViewById<Button>(R.id.easyBiology).setOnClickListener {
+            setupQuestions(dialog, "easyBiology")
+        }
+
+        dialog.findViewById<Button>(R.id.hardBiology).setOnClickListener {
+            setupQuestions(dialog, "hardBiology")
+        }
+        dialog.show()
+    }
+
+    private fun setupQuestions(dialog: Dialog, mode: String) {
+        gameViewModel.setGameMode(mode)
+        gameViewModel.setupQuestions()
+        dialog.dismiss()
     }
 
 }

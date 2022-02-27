@@ -22,10 +22,16 @@ class GameRepository (private val retrofit: RetrofitApi) {
     val currentQuestions get() = _currentQuestions
     val earnedPoints get() = _earnedPoints
 
+    private var gameMode: String = "easyBiology"
     private var pointPerQuestion: Int = 0
 
-    fun setupEasyBiologyQuestions() {
-        val requestCall = retrofit.getEasyBiology()
+    fun setupQuestions() {
+
+        val requestCall = when(gameMode) {
+            "easyBiology" -> retrofit.getEasyBiology()
+            "hardBiology" -> retrofit.getHardBiology()
+            else -> retrofit.getEasyBiology()
+        }
 
         requestCall.enqueue(object: Callback<List<Question>> {
             override fun onResponse(
@@ -68,5 +74,9 @@ class GameRepository (private val retrofit: RetrofitApi) {
 
     private fun setSuccessStatus() {
         _status.value = Status.SUCCESS
+    }
+
+    fun setGameMode(mode: String) {
+        gameMode = mode
     }
 }

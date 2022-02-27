@@ -10,8 +10,8 @@ class GameViewModel (private val repository: GameRepository): ViewModel() {
     private val numberOfCurrentQuestion get() = repository.numberOfCurrentQuestion
     val earnedPoints get() = repository.earnedPoints
 
-    fun setupEasyBiologyQuestions() {
-        repository.setupEasyBiologyQuestions()
+    fun setupQuestions() {
+        repository.setupQuestions()
     }
 
     fun setNormalStatus() {
@@ -47,6 +47,10 @@ class GameViewModel (private val repository: GameRepository): ViewModel() {
         distractors.shuffle()
         distractors.removeLast()
         return distractors
+    }
+
+    fun setGameMode(mode: String) {
+        repository.setGameMode(mode)
     }
 
 }
