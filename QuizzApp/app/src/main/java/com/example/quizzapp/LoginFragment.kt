@@ -1,22 +1,22 @@
 package com.example.quizzapp
 
+import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.quizzapp.databinding.FragmentLoginBinding
 import com.example.quizzapp.model.AuthenticationViewModel
 import com.example.quizzapp.model.Status
-import com.facebook.login.LoginResult
-import org.koin.androidx.viewmodel.ext.android.sharedViewModel
-import android.content.Intent
-import android.util.Log
 import com.facebook.*
 import com.facebook.login.LoginManager
-import org.json.JSONObject
+import com.facebook.login.LoginResult
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 
 class LoginFragment : Fragment() {
@@ -47,25 +47,24 @@ class LoginFragment : Fragment() {
             viewModel.loginUser(username, password)
         }
 
-        viewModel.status.observe(viewLifecycleOwner,
-            {
-                status ->
-                when(status) {
-                    Status.SUCCESS -> {
-                        findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToHomeFragment())
-                        viewModel.setNormalStatus()
-                    }
-
-                    Status.ERROR -> {
-                        invalidData()
-                        viewModel.setNormalStatus()
-                    }
-
-                    else -> {
-                        // do nothing
-                    }
+        viewModel.status.observe(viewLifecycleOwner
+        ) { status ->
+            when (status) {
+                Status.SUCCESS -> {
+                    findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToHomeFragment())
+                    viewModel.setNormalStatus()
                 }
-            })
+
+                Status.ERROR -> {
+                    invalidData()
+                    viewModel.setNormalStatus()
+                }
+
+                else -> {
+                    // do nothing
+                }
+            }
+        }
 
         binding.loginButton.fragment = this
         callbackManager = CallbackManager.Factory.create();
@@ -96,6 +95,24 @@ class LoginFragment : Fragment() {
             }
         })
 
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestEmail()
+            .build()
+
+        val mGoogleSignInClient = GoogleSignIn.getClient(requireActivity(), gso)
+
+        val account = GoogleSignIn.getLastSignedInAccount(requireContext())
+        if(account != null) {
+            println(account.displayName)
+            mGoogleSignInClient.signOut()
+        }
+
+        binding.googleButton.setOnClickListener {
+            val signInIntent = mGoogleSignInClient.signInIntent
+            startActivityForResult(signInIntent, 1000)
+
+        }
+
     }
 
     private fun invalidData() {
@@ -113,6 +130,10 @@ class LoginFragment : Fragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         callbackManager.onActivityResult(requestCode, resultCode, data)
         super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == 1000) {
+            println("Google connection - success")
+        }
     }
 
 }

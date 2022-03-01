@@ -45,43 +45,41 @@ class HomeFragment : Fragment() {
             authenticationViewModel.getAllUsers()
         }
 
-        gameViewModel.status.observe(viewLifecycleOwner,
-            {
-                    status ->
-                when(status) {
-                    Status.SUCCESS -> {
-                        findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToGameFragment())
-                        gameViewModel.setNormalStatus()
-                    }
-
-                    Status.ERROR -> {
-                        gameViewModel.setNormalStatus()
-                    }
-
-                    else -> {
-                        // do nothing
-                    }
+        gameViewModel.status.observe(viewLifecycleOwner
+        ) { status ->
+            when (status) {
+                Status.SUCCESS -> {
+                    findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToGameFragment())
+                    gameViewModel.setNormalStatus()
                 }
-            })
 
-        authenticationViewModel.status.observe(viewLifecycleOwner,
-            {
-                    status ->
-                when(status) {
-                    Status.RECEIVED_USERS -> {
-                        findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToLeaderboardFragment())
-                        authenticationViewModel.setNormalStatus()
-                    }
-
-                    Status.ERROR -> {
-                        gameViewModel.setNormalStatus()
-                    }
-
-                    else -> {
-                        // do nothing
-                    }
+                Status.ERROR -> {
+                    gameViewModel.setNormalStatus()
                 }
-            })
+
+                else -> {
+                    // do nothing
+                }
+            }
+        }
+
+        authenticationViewModel.status.observe(viewLifecycleOwner
+        ) { status ->
+            when (status) {
+                Status.RECEIVED_USERS -> {
+                    findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToLeaderboardFragment())
+                    authenticationViewModel.setNormalStatus()
+                }
+
+                Status.ERROR -> {
+                    gameViewModel.setNormalStatus()
+                }
+
+                else -> {
+                    // do nothing
+                }
+            }
+        }
 
     }
 
