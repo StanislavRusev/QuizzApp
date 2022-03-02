@@ -88,7 +88,7 @@ mongoClient.connect(url, function(err, db) {
         })
     })
 
-    app.post("/facebook", function(req, res) {
+    app.post("/socialMedia", function(req, res) {
         const user = {
             name: req.body.name,
             password: req.body.password,

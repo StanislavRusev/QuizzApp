@@ -15,15 +15,23 @@ import com.facebook.*
 import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
 import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.tasks.Task
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
+
+const val RC_GOOGLE = 1000
 
 class LoginFragment : Fragment() {
     private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!
     private val viewModel: AuthenticationViewModel by sharedViewModel()
     private lateinit var callbackManager: CallbackManager
+    private lateinit var gso: GoogleSignInOptions
+    private lateinit var mGoogleSignInClient: GoogleSignInClient
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -82,7 +90,7 @@ class LoginFragment : Fragment() {
                     val name = obj?.getString("name")
                     val id = obj?.getString("id")
 
-                    viewModel.getFacebook(name!!, id!!)
+                    viewModel.getSocialMedia(name!!, id!!)
                 }
 
                 val bundle = Bundle()
@@ -95,21 +103,15 @@ class LoginFragment : Fragment() {
             }
         })
 
-        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+        gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestEmail()
             .build()
 
-        val mGoogleSignInClient = GoogleSignIn.getClient(requireActivity(), gso)
-
-        val account = GoogleSignIn.getLastSignedInAccount(requireContext())
-        if(account != null) {
-            println(account.displayName)
-            mGoogleSignInClient.signOut()
-        }
+        mGoogleSignInClient = GoogleSignIn.getClient(requireActivity(), gso)
 
         binding.googleButton.setOnClickListener {
             val signInIntent = mGoogleSignInClient.signInIntent
-            startActivityForResult(signInIntent, 1000)
+            startActivityForResult(signInIntent, RC_GOOGLE)
 
         }
 
@@ -131,8 +133,17 @@ class LoginFragment : Fragment() {
         callbackManager.onActivityResult(requestCode, resultCode, data)
         super.onActivityResult(requestCode, resultCode, data)
 
-        if (requestCode == 1000) {
-            println("Google connection - success")
+        if (requestCode == RC_GOOGLE) {
+            val task: Task<GoogleSignInAccount> =
+                GoogleSignIn.getSignedInAccountFromIntent(data)
+
+            try {
+                val account: GoogleSignInAccount = task.getResult(ApiException::class.java)
+                viewModel.getSocialMedia(account.displayName!!, account.id!!)
+                mGoogleSignInClient.signOut()
+            } catch (e: ApiException) {
+                println("failed")
+            }
         }
     }
 

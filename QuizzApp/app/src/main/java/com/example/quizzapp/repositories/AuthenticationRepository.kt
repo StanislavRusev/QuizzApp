@@ -150,14 +150,14 @@ class AuthenticationRepository (private val retrofit: RetrofitApi) {
         })
     }
 
-    fun getFacebook(username: String, password: String) {
+    fun getSocialMedia(username: String, password: String) {
         val body = mutableMapOf<String, String>()
         val currentDate: String = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(Date())
         body.put(NAME, username)
         body.put(PASSWORD, password)
         body.put(DATE, currentDate)
 
-        val requestCall = retrofit.getFacebook(body)
+        val requestCall = retrofit.getSocialMediaAccount(body)
 
         requestCall.enqueue(object: Callback<User> {
             override fun onResponse(call: Call<User>, response: Response<User>) {
