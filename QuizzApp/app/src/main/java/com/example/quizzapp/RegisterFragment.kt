@@ -36,25 +36,24 @@ class RegisterFragment : Fragment() {
             viewModel.registerUser(username, password, confPass)
         }
 
-        viewModel.status.observe(viewLifecycleOwner,
-            {
-                status ->
-                when(status) {
-                    Status.SUCCESS -> {
-                        findNavController().navigate(RegisterFragmentDirections.actionRegisterFragmentToLoginFragment())
-                        viewModel.setNormalStatus()
-                    }
-
-                    Status.ERROR -> {
-                        invalidData()
-                        viewModel.setNormalStatus()
-                    }
-
-                    else -> {
-                        // do nothing
-                    }
+        viewModel.status.observe(viewLifecycleOwner
+        ) { status ->
+            when (status) {
+                Status.SUCCESS -> {
+                    findNavController().navigate(RegisterFragmentDirections.actionRegisterFragmentToLoginFragment())
+                    viewModel.setNormalStatus()
                 }
-            })
+
+                Status.ERROR -> {
+                    invalidData()
+                    viewModel.setNormalStatus()
+                }
+
+                else -> {
+                    // do nothing
+                }
+            }
+        }
     }
 
     private fun invalidData() {

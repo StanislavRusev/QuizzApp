@@ -46,8 +46,8 @@ class AuthenticationViewModel (private val repository: AuthenticationRepository)
         return currentUser?.gamesPlayedToday!! <= 3
     }
 
-    fun getSocialMedia(username: String, password: String) {
-        repository.getSocialMedia(username, password)
+    fun getSocialMedia(username: String, password: String, type: String) {
+        repository.getSocialMedia(username, password, type)
     }
 
 }

@@ -90,7 +90,7 @@ class LoginFragment : Fragment() {
                     val name = obj?.getString("name")
                     val id = obj?.getString("id")
 
-                    viewModel.getSocialMedia(name!!, id!!)
+                    viewModel.getSocialMedia(name!!, id!!, "facebook")
                 }
 
                 val bundle = Bundle()
@@ -139,7 +139,7 @@ class LoginFragment : Fragment() {
 
             try {
                 val account: GoogleSignInAccount = task.getResult(ApiException::class.java)
-                viewModel.getSocialMedia(account.displayName!!, account.id!!)
+                viewModel.getSocialMedia(account.displayName!!, account.id!!, "google")
                 mGoogleSignInClient.signOut()
             } catch (e: ApiException) {
                 println("failed")

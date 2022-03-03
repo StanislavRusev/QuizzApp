@@ -19,7 +19,8 @@ mongoClient.connect(url, function(err, db) {
             password: req.body.password,
             date: req.body.date,
             points: 0,
-            gamesPlayedToday: 0
+            gamesPlayedToday: 0,
+            type: "normal"
         }
         
         collection.findOne({name: req.body.name}, function(err, result) {
@@ -36,7 +37,8 @@ mongoClient.connect(url, function(err, db) {
     app.post("/login", function(req, res) {
         const user = {
             name: req.body.name,
-            password: req.body.password
+            password: req.body.password,
+            type: "normal"
         }
 
         collection.findOne(user, function(err, result) {
@@ -94,10 +96,11 @@ mongoClient.connect(url, function(err, db) {
             password: req.body.password,
             date: req.body.date,
             points: 0,
-            gamesPlayedToday: 0
+            gamesPlayedToday: 0,
+            type: req.body.type
         }
 
-        collection.findOne({name: req.body.name, password: req.body.password}, function(err, result) {
+        collection.findOne({name: req.body.name, password: req.body.password, type: req.body.type}, function(err, result) {
             if(result == null) {
                 collection.insertOne(user, function(err, result) {
                     res.status(200).send(user);

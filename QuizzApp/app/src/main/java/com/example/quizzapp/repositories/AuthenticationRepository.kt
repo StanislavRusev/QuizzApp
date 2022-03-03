@@ -16,6 +16,7 @@ const val PASSWORD = "password"
 const val POINTS = "points"
 const val DATE = "date"
 const val PLAYED = "gamesPlayedToday"
+const val TYPE = "type"
 
 class AuthenticationRepository (private val retrofit: RetrofitApi) {
     private var _currentUser: User? = null
@@ -26,7 +27,7 @@ class AuthenticationRepository (private val retrofit: RetrofitApi) {
     val allUsers get() = _allUsers
 
     fun registerUser(username: String, password: String, confirmPassword: String) {
-        if(password != confirmPassword) {
+        if(password != confirmPassword || username == "" || password == "") {
             setErrorStatus()
             return
         }
@@ -150,12 +151,13 @@ class AuthenticationRepository (private val retrofit: RetrofitApi) {
         })
     }
 
-    fun getSocialMedia(username: String, password: String) {
+    fun getSocialMedia(username: String, password: String, type: String) {
         val body = mutableMapOf<String, String>()
         val currentDate: String = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(Date())
         body.put(NAME, username)
         body.put(PASSWORD, password)
         body.put(DATE, currentDate)
+        body.put(TYPE, type)
 
         val requestCall = retrofit.getSocialMediaAccount(body)
 
