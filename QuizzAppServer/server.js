@@ -12,6 +12,7 @@ mongoClient.connect(url, function(err, db) {
     const collection = myDb.collection("users");
     const easyBiologyCollection = myDb.collection("questions");
     const hardBiologyCollection = myDb.collection("hard");
+    const multiplayer = myDb.collection("multiplayer");
 
     app.post("/register", function(req, res) {
         const user = {
@@ -84,7 +85,7 @@ mongoClient.connect(url, function(err, db) {
     })
 
     app.post("/updateLastPlayed", function(req, res) {
-        var newDate = { $set: {date: req.body.date, gamesPlayedToday: parseInt(req.body.gamesPlayedToday)}}
+        var newDate = { $set: {date: req.body.date, gamesPlayedToday: parseInt(req.body.gamesPlayedToday)}};
         collection.updateOne({ name: req.body.name }, newDate, function(err, result) {
             res.status(200).send();
         })
@@ -107,6 +108,33 @@ mongoClient.connect(url, function(err, db) {
                 })
             } else {
                 res.status(200).send(result);
+            }
+        })
+
+
+    })
+
+    app.post("/addMultiplayer", function(req, res) {
+        const user = {
+            name: req.body.name,
+            enemy: "",
+            status: "waiting",
+            points: 0  
+        }
+
+        multiplayer.findOne({status: "waiting"}, function(err, result) {
+            if(result == null) {
+                multiplayer.insertOne(user, function(err, result) {
+                    res.status(201).send();
+                })
+            } else {
+                var update = { $set: {status: "playing", enemy: req.body.name}};
+                multiplayer.updateOne(result, update, function(err, resultUpdate) {})
+                user.status = "playing";
+                user.enemy = result.name;
+                multiplayer.insertOne(user, function(err, result) {
+                    res.status(200).send();
+                })                
             }
         })
 
