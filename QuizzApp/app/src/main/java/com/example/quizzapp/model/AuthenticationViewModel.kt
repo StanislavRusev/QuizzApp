@@ -50,4 +50,12 @@ class AuthenticationViewModel (private val repository: AuthenticationRepository)
         repository.getSocialMedia(username, password, type)
     }
 
+    fun joinMultiplayer() {
+        repository.joinMultiplayer()
+    }
+
+    fun removeMultiplayer() {
+        repository.removeMultiplayer()
+    }
+
 }

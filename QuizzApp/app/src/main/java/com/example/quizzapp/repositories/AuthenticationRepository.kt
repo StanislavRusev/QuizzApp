@@ -179,6 +179,50 @@ class AuthenticationRepository (private val retrofit: RetrofitApi) {
         })
     }
 
+    fun joinMultiplayer() {
+        val body = mutableMapOf<String, String>()
+
+        body.put(NAME, _currentUser?.name.toString())
+
+        val requestCall = retrofit.joinMultiplayer(body)
+
+        requestCall.enqueue(object: Callback<Unit> {
+            override fun onResponse(call: Call<Unit>, response: Response<Unit>) {
+                when(response.code()) {
+                    200 -> _status.value = Status.PLAYING
+                    201 -> _status.value = Status.WAITING
+                    else -> _status.value = Status.ERROR
+                }
+            }
+
+            override fun onFailure(call: Call<Unit>, t: Throwable) {
+                TODO("Not yet implemented")
+            }
+
+        })
+
+
+    }
+
+    fun removeMultiplayer() {
+        val body = mutableMapOf<String, String>()
+
+        body.put(NAME, _currentUser?.name.toString())
+
+        val requestCall = retrofit.removeMultiplayer(body)
+
+        requestCall.enqueue(object: Callback<Unit> {
+            override fun onResponse(call: Call<Unit>, response: Response<Unit>) {
+                println("you were removed")
+            }
+
+            override fun onFailure(call: Call<Unit>, t: Throwable) {
+
+            }
+
+        })
+    }
+
     fun getTitle(user: User): String {
         return when {
             user.points <= 20 -> "Noob"

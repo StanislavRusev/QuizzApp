@@ -4,5 +4,9 @@ enum class Status {
     NORMAL,
     SUCCESS,
     ERROR,
-    RECEIVED_USERS
+    RECEIVED_USERS,
+
+    //For Multiplayer
+    WAITING,
+    PLAYING
 }

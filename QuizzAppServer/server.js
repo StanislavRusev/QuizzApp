@@ -137,8 +137,12 @@ mongoClient.connect(url, function(err, db) {
                 })                
             }
         })
+    })
 
-
+    app.post("/removeMultiplayer", function(req, res) {
+        multiplayer.deleteOne({name: req.body.name}, function(err, result) {
+            res.status(200).send()
+        })
     })
 })
 

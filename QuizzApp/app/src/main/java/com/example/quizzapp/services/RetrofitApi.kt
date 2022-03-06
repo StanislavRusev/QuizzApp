@@ -28,6 +28,12 @@ interface RetrofitApi {
     @POST("updateLastPlayed")
     fun updateLastPlayed(@Body map: Map<String, String>): Call<Unit>
 
-    @POST("/socialMedia")
+    @POST("socialMedia")
     fun getSocialMediaAccount(@Body map: Map<String, String>): Call<User>
+
+    @POST("addMultiplayer")
+    fun joinMultiplayer(@Body map: Map<String, String>): Call<Unit>
+
+    @POST("removeMultiplayer")
+    fun removeMultiplayer(@Body map: Map<String, String>): Call<Unit>
 }

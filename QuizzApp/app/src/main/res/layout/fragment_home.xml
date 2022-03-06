@@ -32,6 +32,18 @@
         app:layout_constraintTop_toBottomOf="@+id/textView" />
 
     <Button
+        android:id="@+id/playMultiplayer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:text="Play Multiplayer"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/playGame" />
+
+    <Button
         android:id="@+id/leaderboard"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -41,7 +53,7 @@
         android:text="Leaderboard"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/playGame" />
+        app:layout_constraintTop_toBottomOf="@+id/playMultiplayer" />
 
     <Button
         android:id="@+id/profile"
