@@ -4,11 +4,13 @@ import android.app.AlertDialog
 import android.app.Dialog
 import android.content.DialogInterface
 import android.os.Bundle
+import android.os.Handler
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import com.example.quizzapp.databinding.FragmentHomeBinding
 import com.example.quizzapp.model.AuthenticationViewModel
@@ -21,6 +23,7 @@ class HomeFragment : Fragment() {
     private val binding get() = _binding!!
     private val authenticationViewModel: AuthenticationViewModel by sharedViewModel()
     private val gameViewModel: GameViewModel by sharedViewModel()
+    private lateinit var dialog: AlertDialog
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -83,9 +86,11 @@ class HomeFragment : Fragment() {
 
                 Status.WAITING -> {
                     waitingDialogBuilder("Waiting")
+                    makeCall()
                 }
 
                 Status.PLAYING -> {
+                    dialog.dismiss()
                     waitingDialogBuilder("Playing")
                 }
 
@@ -94,6 +99,8 @@ class HomeFragment : Fragment() {
                 }
             }
         }
+
+        dialog = AlertDialog.Builder(context).create()
 
     }
 
@@ -116,11 +123,9 @@ class HomeFragment : Fragment() {
     }
 
     private fun waitingDialogBuilder(title: String) {
-        val dialog = AlertDialog.Builder(context)
         dialog.setTitle(title)
-        dialog.setNeutralButton("Cancel") { _: DialogInterface, _: Int ->
-            authenticationViewModel.removeMultiplayer()
-        }
+        dialog.setButton(Dialog.BUTTON_NEUTRAL, "Cancel"
+        ) { _, _ -> authenticationViewModel.removeMultiplayer() }
 
         dialog.show()
     }
@@ -129,6 +134,15 @@ class HomeFragment : Fragment() {
         gameViewModel.setGameMode(mode)
         gameViewModel.setupQuestions()
         dialog.dismiss()
+    }
+
+    private fun makeCall() {
+        val handler = Handler()
+
+        val runnable = Runnable { Toast.makeText(context, "Call was made", Toast.LENGTH_SHORT).show()
+        authenticationViewModel.checkStatus()}
+
+        handler.postDelayed(runnable, 3000)
     }
 
 }

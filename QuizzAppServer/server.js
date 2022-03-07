@@ -144,6 +144,21 @@ mongoClient.connect(url, function(err, db) {
             res.status(200).send()
         })
     })
+
+    app.post("/checkStatus", function(req, res) {
+        multiplayer.findOne({name: req.body.name}, function(err, result) {
+            if(result == null) {
+                res.status(400).send()
+            } else {
+                switch(result.status) {
+                    case "waiting": res.status(201).send()
+                    case "playing": res.status(200).send()
+                    default: res.status(404).send() 
+                }
+                
+            }
+        })
+    })
 })
 
 app.listen(8080, () => {

@@ -58,4 +58,8 @@ class AuthenticationViewModel (private val repository: AuthenticationRepository)
         repository.removeMultiplayer()
     }
 
+    fun checkStatus() {
+        repository.checkStatus()
+    }
+
 }

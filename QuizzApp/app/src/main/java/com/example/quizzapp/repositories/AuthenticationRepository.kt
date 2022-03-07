@@ -223,6 +223,28 @@ class AuthenticationRepository (private val retrofit: RetrofitApi) {
         })
     }
 
+    fun checkStatus() {
+        val body = mutableMapOf<String, String>()
+
+        body.put(NAME, _currentUser?.name.toString())
+
+        val requestCall = retrofit.checkStatus(body)
+
+        requestCall.enqueue(object: Callback<Unit> {
+            override fun onResponse(call: Call<Unit>, response: Response<Unit>) {
+                when(response.code()) {
+                    200 -> _status.value = Status.PLAYING
+                    201 -> _status.value = Status.WAITING
+                }
+            }
+
+            override fun onFailure(call: Call<Unit>, t: Throwable) {
+
+            }
+
+        })
+    }
+
     fun getTitle(user: User): String {
         return when {
             user.points <= 20 -> "Noob"

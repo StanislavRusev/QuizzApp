@@ -36,4 +36,7 @@ interface RetrofitApi {
 
     @POST("removeMultiplayer")
     fun removeMultiplayer(@Body map: Map<String, String>): Call<Unit>
+
+    @POST("checkStatus")
+    fun checkStatus(@Body map: Map<String, String>): Call<Unit>
 }
