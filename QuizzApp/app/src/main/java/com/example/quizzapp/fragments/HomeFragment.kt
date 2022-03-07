@@ -1,8 +1,7 @@
-package com.example.quizzapp
+package com.example.quizzapp.fragments
 
 import android.app.AlertDialog
 import android.app.Dialog
-import android.content.DialogInterface
 import android.os.Bundle
 import android.os.Handler
 import androidx.fragment.app.Fragment
@@ -12,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Toast
 import androidx.navigation.fragment.findNavController
+import com.example.quizzapp.R
 import com.example.quizzapp.databinding.FragmentHomeBinding
 import com.example.quizzapp.model.AuthenticationViewModel
 import com.example.quizzapp.model.GameViewModel
@@ -81,17 +81,19 @@ class HomeFragment : Fragment() {
                 }
 
                 Status.ERROR -> {
-                    gameViewModel.setNormalStatus()
+                    authenticationViewModel.setNormalStatus()
                 }
 
                 Status.WAITING -> {
                     waitingDialogBuilder("Waiting")
                     makeCall()
+                    authenticationViewModel.setNormalStatus()
                 }
 
                 Status.PLAYING -> {
                     dialog.dismiss()
                     waitingDialogBuilder("Playing")
+                    authenticationViewModel.setNormalStatus()
                 }
 
                 else -> {
@@ -101,6 +103,8 @@ class HomeFragment : Fragment() {
         }
 
         dialog = AlertDialog.Builder(context).create()
+        dialog.setCanceledOnTouchOutside(false)
+        dialog.setCancelable(false)
 
     }
 

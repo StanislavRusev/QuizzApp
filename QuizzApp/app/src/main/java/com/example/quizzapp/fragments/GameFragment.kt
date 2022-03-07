@@ -1,4 +1,4 @@
-package com.example.quizzapp
+package com.example.quizzapp.fragments
 
 import android.os.Bundle
 import android.os.CountDownTimer

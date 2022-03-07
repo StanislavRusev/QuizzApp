@@ -1,4 +1,4 @@
-package com.example.quizzapp
+package com.example.quizzapp.fragments
 
 import android.app.AlertDialog
 import android.content.DialogInterface
@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
+import com.example.quizzapp.R
 import com.example.quizzapp.databinding.FragmentProfileBinding
 import com.example.quizzapp.model.AuthenticationViewModel
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
