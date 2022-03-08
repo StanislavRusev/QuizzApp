@@ -125,6 +125,10 @@ class GameFragment : Fragment() {
                 if(!gameViewModel.toNextQuestion()) {
                     Toast.makeText(context, "You got " + gameViewModel.earnedPoints + " right", Toast.LENGTH_SHORT).show()
                     authenticationViewModel.updatePoints(gameViewModel.earnedPoints)
+                    if(gameViewModel.gameType == "multiplayer") {
+                        gameViewModel.gameType = "singleplayer"
+                        authenticationViewModel.finishMultiplayer()
+                    }
                     findNavController().navigate(GameFragmentDirections.actionGameFragmentToHomeFragment())
                     return
                 }
