@@ -39,4 +39,7 @@ interface RetrofitApi {
 
     @POST("checkStatus")
     fun checkStatus(@Body map: Map<String, String>): Call<Unit>
+
+    @POST("finishMultiplayer")
+    fun finishMultiplayer(@Body map: Map<String, String>): Call<Unit>
 }

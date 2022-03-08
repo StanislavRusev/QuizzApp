@@ -153,10 +153,18 @@ mongoClient.connect(url, function(err, db) {
                 switch(result.status) {
                     case "waiting": res.status(201).send()
                     case "playing": res.status(200).send()
+                    case "finished": res.status(202).send()
                     default: res.status(404).send() 
                 }
                 
             }
+        })
+    })
+
+    app.post("/finishMultiplayer", function(req, res) {
+        var update = { $set: {status: "finished", points: 0}};
+        multiplayer.updateOne({name: req.body.name}, update, function(err, resultUpdate) {
+            res.status(200).send()
         })
     })
 })

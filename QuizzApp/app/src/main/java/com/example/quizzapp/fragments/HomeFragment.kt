@@ -92,7 +92,15 @@ class HomeFragment : Fragment() {
 
                 Status.PLAYING -> {
                     dialog.dismiss()
-                    waitingDialogBuilder("Playing")
+                    gameViewModel.setGameMode("easyBiology")
+                    gameViewModel.setupQuestions()
+                    gameViewModel.gameType = "multiplayer"
+                    authenticationViewModel.setNormalStatus()
+                }
+
+                Status.FINISHED -> {
+                    Toast.makeText(context,"You finished", Toast.LENGTH_SHORT).show()
+                    makeCall()
                     authenticationViewModel.setNormalStatus()
                 }
 
@@ -143,8 +151,7 @@ class HomeFragment : Fragment() {
     private fun makeCall() {
         val handler = Handler()
 
-        val runnable = Runnable { Toast.makeText(context, "Call was made", Toast.LENGTH_SHORT).show()
-        authenticationViewModel.checkStatus()}
+        val runnable = Runnable { authenticationViewModel.checkStatus()}
 
         handler.postDelayed(runnable, 3000)
     }

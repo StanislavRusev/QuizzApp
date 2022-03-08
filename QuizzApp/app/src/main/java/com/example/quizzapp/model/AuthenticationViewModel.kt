@@ -62,4 +62,8 @@ class AuthenticationViewModel (private val repository: AuthenticationRepository)
         repository.checkStatus()
     }
 
+    fun finishMultiplayer() {
+        repository.finishMultiplayer()
+    }
+
 }

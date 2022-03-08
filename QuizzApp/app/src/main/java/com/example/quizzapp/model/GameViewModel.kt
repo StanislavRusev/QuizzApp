@@ -9,6 +9,7 @@ class GameViewModel (private val repository: GameRepository): ViewModel() {
     private val currentQuestions get() = repository.currentQuestions
     private val numberOfCurrentQuestion get() = repository.numberOfCurrentQuestion
     val earnedPoints get() = repository.earnedPoints
+    var gameType = "singleplayer"
 
     fun setupQuestions() {
         repository.setupQuestions()
