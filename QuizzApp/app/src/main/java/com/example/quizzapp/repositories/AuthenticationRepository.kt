@@ -235,7 +235,8 @@ class AuthenticationRepository (private val retrofit: RetrofitApi) {
                 when(response.code()) {
                     200 -> _status.value = Status.PLAYING
                     201 -> _status.value = Status.WAITING
-                    202 -> _status.value = Status.FINISHED
+                    202 -> _status.value = Status.ONE_FINISHED
+                    204 -> _status.value = Status.ALL_FINISHED
                 }
             }
 
@@ -255,7 +256,7 @@ class AuthenticationRepository (private val retrofit: RetrofitApi) {
 
         requestCall.enqueue(object: Callback<Unit> {
             override fun onResponse(call: Call<Unit>, response: Response<Unit>) {
-                _status.value = Status.FINISHED
+                _status.value = Status.ONE_FINISHED
             }
 
             override fun onFailure(call: Call<Unit>, t: Throwable) {

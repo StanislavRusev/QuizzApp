@@ -141,20 +141,28 @@ mongoClient.connect(url, function(err, db) {
 
     app.post("/removeMultiplayer", function(req, res) {
         multiplayer.deleteOne({name: req.body.name}, function(err, result) {
-            res.status(200).send()
+            res.status(200).send();
         })
     })
 
     app.post("/checkStatus", function(req, res) {
         multiplayer.findOne({name: req.body.name}, function(err, result) {
             if(result == null) {
-                res.status(400).send()
+                res.status(400).send();
             } else {
                 switch(result.status) {
-                    case "waiting": res.status(201).send()
-                    case "playing": res.status(200).send()
-                    case "finished": res.status(202).send()
-                    default: res.status(404).send() 
+                    case "waiting": res.status(201).send(); break;
+                    case "playing": res.status(200).send(); break;
+                    case "finished": {
+                        multiplayer.findOne({name: result.enemy}, function(err, enemy) {
+                            if(enemy.status == "finished") {
+                                return res.status(204).send()
+                            } else {
+                                return res.status(202).send()
+                            }
+                        })
+                    } break;
+                    default: res.status(404).send(); break;
                 }
                 
             }
@@ -164,7 +172,7 @@ mongoClient.connect(url, function(err, db) {
     app.post("/finishMultiplayer", function(req, res) {
         var update = { $set: {status: "finished", points: 0}};
         multiplayer.updateOne({name: req.body.name}, update, function(err, resultUpdate) {
-            res.status(200).send()
+            res.status(200).send();
         })
     })
 })

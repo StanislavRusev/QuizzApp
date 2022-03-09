@@ -9,5 +9,6 @@ enum class Status {
     //For Multiplayer
     WAITING,
     PLAYING,
-    FINISHED
+    ONE_FINISHED,
+    ALL_FINISHED
 }

@@ -98,9 +98,15 @@ class HomeFragment : Fragment() {
                     authenticationViewModel.setNormalStatus()
                 }
 
-                Status.FINISHED -> {
+                Status.ONE_FINISHED -> {
                     Toast.makeText(context,"You finished", Toast.LENGTH_SHORT).show()
                     makeCall()
+                    authenticationViewModel.setNormalStatus()
+                }
+
+                Status.ALL_FINISHED -> {
+                    Toast.makeText(context,"Everyone finished", Toast.LENGTH_SHORT).show()
+                    authenticationViewModel.removeMultiplayer()
                     authenticationViewModel.setNormalStatus()
                 }
 
