@@ -157,7 +157,9 @@ class HomeFragment : Fragment() {
     private fun makeCall() {
         val handler = Handler()
 
-        val runnable = Runnable { authenticationViewModel.checkStatus()}
+        val runnable = Runnable {
+            authenticationViewModel.checkStatus()
+        }
 
         handler.postDelayed(runnable, 3000)
     }

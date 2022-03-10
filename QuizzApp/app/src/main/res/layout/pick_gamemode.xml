@@ -7,7 +7,9 @@
 
     <Button
         android:id="@+id/easyBiology"
-        android:layout_width="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Biology - Easy"
         app:layout_constraintBottom_toTopOf="@+id/hardBiology"
@@ -18,8 +20,10 @@
 
     <Button
         android:id="@+id/hardBiology"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
         android:text="Biology - Hard"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
