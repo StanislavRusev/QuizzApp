@@ -85,7 +85,7 @@ class HomeFragment : Fragment() {
                 }
 
                 Status.WAITING -> {
-                    waitingDialogBuilder("Waiting")
+                    waitingDialogBuilder("Waiting for another player to join")
                     makeCall()
                     authenticationViewModel.setNormalStatus()
                 }
@@ -99,12 +99,13 @@ class HomeFragment : Fragment() {
                 }
 
                 Status.ONE_FINISHED -> {
-                    Toast.makeText(context,"You finished", Toast.LENGTH_SHORT).show()
+                    waitingDialogBuilder("Waiting for opponent to finish")
                     makeCall()
                     authenticationViewModel.setNormalStatus()
                 }
 
                 Status.ALL_FINISHED -> {
+                    dialog.dismiss()
                     Toast.makeText(context,"Everyone finished", Toast.LENGTH_SHORT).show()
                     authenticationViewModel.removeMultiplayer()
                     authenticationViewModel.setNormalStatus()

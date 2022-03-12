@@ -247,10 +247,11 @@ class AuthenticationRepository (private val retrofit: RetrofitApi) {
         })
     }
 
-    fun finishMultiplayer() {
+    fun finishMultiplayer(points: Int) {
         val body = mutableMapOf<String, String>()
 
         body.put(NAME, _currentUser?.name.toString())
+        body.put(POINTS, points.toString())
 
         val requestCall = retrofit.finishMultiplayer(body)
 
@@ -268,10 +269,10 @@ class AuthenticationRepository (private val retrofit: RetrofitApi) {
 
     fun getTitle(user: User): String {
         return when {
-            user.points <= 20 -> "Noob"
-            user.points <= 40 -> "Smart"
-            user.points <= 60 -> "Rising star"
-            user.points <= 80 -> "Einstein"
+            user.points <= 200 -> "Noob"
+            user.points <= 400 -> "Smart"
+            user.points <= 600 -> "Rising star"
+            user.points <= 800 -> "Einstein"
             else -> "Quiz GOD"
         }
     }

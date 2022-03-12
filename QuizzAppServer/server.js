@@ -155,10 +155,12 @@ mongoClient.connect(url, function(err, db) {
                     case "playing": res.status(200).send(); break;
                     case "finished": {
                         multiplayer.findOne({name: result.enemy}, function(err, enemy) {
-                            if(enemy.status == "finished") {
-                                return res.status(204).send()
+                            if(enemy == null) {
+                                return res.status(204).send();
+                            } else if (enemy.status == "finished") {
+                                return res.status(204).send();
                             } else {
-                                return res.status(202).send()
+                                return res.status(202).send();
                             }
                         })
                     } break;
@@ -170,7 +172,7 @@ mongoClient.connect(url, function(err, db) {
     })
 
     app.post("/finishMultiplayer", function(req, res) {
-        var update = { $set: {status: "finished", points: 0}};
+        var update = { $set: {status: "finished", points: parseInt(req.body.points)}};
         multiplayer.updateOne({name: req.body.name}, update, function(err, resultUpdate) {
             res.status(200).send();
         })

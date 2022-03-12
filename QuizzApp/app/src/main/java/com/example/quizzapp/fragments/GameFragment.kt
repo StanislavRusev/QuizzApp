@@ -69,6 +69,10 @@ class GameFragment : Fragment() {
         super.onDestroyView()
         _binding = null
         countDownTimer.cancel()
+        if(gameViewModel.gameType == "multiplayer") {
+            gameViewModel.gameType = "singleplayer"
+            authenticationViewModel.finishMultiplayer(0)
+        }
     }
 
     private fun chooseAnswer(answer: String) {
@@ -84,7 +88,7 @@ class GameFragment : Fragment() {
             authenticationViewModel.updatePoints(gameViewModel.earnedPoints)
             if(gameViewModel.gameType == "multiplayer") {
                 gameViewModel.gameType = "singleplayer"
-                authenticationViewModel.finishMultiplayer()
+                authenticationViewModel.finishMultiplayer(gameViewModel.earnedPoints)
             }
             findNavController().navigate(GameFragmentDirections.actionGameFragmentToHomeFragment())
             return
@@ -127,7 +131,7 @@ class GameFragment : Fragment() {
                     authenticationViewModel.updatePoints(gameViewModel.earnedPoints)
                     if(gameViewModel.gameType == "multiplayer") {
                         gameViewModel.gameType = "singleplayer"
-                        authenticationViewModel.finishMultiplayer()
+                        authenticationViewModel.finishMultiplayer(gameViewModel.earnedPoints)
                     }
                     findNavController().navigate(GameFragmentDirections.actionGameFragmentToHomeFragment())
                     return
