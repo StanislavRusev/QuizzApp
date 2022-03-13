@@ -109,12 +109,12 @@ class HomeFragment : Fragment() {
                     dialog.dismiss()
                     userViewModel.setNormalStatus()
                     userViewModel.getEnemyPoints()
-                    userViewModel.removeMultiplayer()
                 }
 
                 Status.SHOW_RESULTS -> {
                     resultDialogBuilder()
                     userViewModel.setNormalStatus()
+                    userViewModel.removeMultiplayer()
                 }
 
                 else -> {
