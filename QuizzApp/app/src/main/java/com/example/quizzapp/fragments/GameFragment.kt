@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import com.example.quizzapp.databinding.FragmentGameBinding
-import com.example.quizzapp.model.AuthenticationViewModel
+import com.example.quizzapp.model.UserViewModel
 import com.example.quizzapp.model.GameViewModel
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
@@ -18,7 +18,7 @@ const val COUNTDOWN: Long = 20000
 class GameFragment : Fragment() {
     private var _binding: FragmentGameBinding? = null
     private val binding get() = _binding!!
-    private val authenticationViewModel: AuthenticationViewModel by sharedViewModel()
+    private val userViewModel: UserViewModel by sharedViewModel()
     private val gameViewModel: GameViewModel by sharedViewModel()
     private lateinit var countDownTimer: CountDownTimer
     private var timeLeftInMillis: Long = COUNTDOWN
@@ -35,9 +35,14 @@ class GameFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        authenticationViewModel.updateLastPlayed()
-        canEarnPoints = authenticationViewModel.canEarnPoints()
+        userViewModel.updateLastPlayed()
+        canEarnPoints = userViewModel.canEarnPoints()
         setupQuestion()
+        if(canEarnPoints) {
+            binding.pointsHint.visibility = View.INVISIBLE
+        } else {
+            binding.pointsHint.visibility = View.VISIBLE
+        }
 
         binding.answer1.setOnClickListener {
             chooseAnswer(binding.answer1.text.toString())
@@ -71,24 +76,25 @@ class GameFragment : Fragment() {
         countDownTimer.cancel()
         if(gameViewModel.gameType == "multiplayer") {
             gameViewModel.gameType = "singleplayer"
-            authenticationViewModel.finishMultiplayer(0)
+            userViewModel.finishMultiplayer(0)
         }
     }
 
     private fun chooseAnswer(answer: String) {
         if(gameViewModel.isRightAnswer(answer)) {
             Toast.makeText(context, "Correct", Toast.LENGTH_SHORT).show()
-            if(canEarnPoints)
-                gameViewModel.addPoints()
+            gameViewModel.addPoints()
         } else {
             Toast.makeText(context, "Incorrect", Toast.LENGTH_SHORT).show()
         }
         if(!gameViewModel.toNextQuestion()) {
             Toast.makeText(context, "You got " + gameViewModel.earnedPoints + " points", Toast.LENGTH_SHORT).show()
-            authenticationViewModel.updatePoints(gameViewModel.earnedPoints)
+            if(canEarnPoints) {
+                userViewModel.updatePoints(gameViewModel.earnedPoints)
+            }
             if(gameViewModel.gameType == "multiplayer") {
                 gameViewModel.gameType = "singleplayer"
-                authenticationViewModel.finishMultiplayer(gameViewModel.earnedPoints)
+                userViewModel.finishMultiplayer(gameViewModel.earnedPoints)
             }
             findNavController().navigate(GameFragmentDirections.actionGameFragmentToHomeFragment())
             return
@@ -128,10 +134,12 @@ class GameFragment : Fragment() {
                 updateTimer()
                 if(!gameViewModel.toNextQuestion()) {
                     Toast.makeText(context, "You got " + gameViewModel.earnedPoints + " right", Toast.LENGTH_SHORT).show()
-                    authenticationViewModel.updatePoints(gameViewModel.earnedPoints)
+                    if(canEarnPoints) {
+                        userViewModel.updatePoints(gameViewModel.earnedPoints)
+                    }
                     if(gameViewModel.gameType == "multiplayer") {
                         gameViewModel.gameType = "singleplayer"
-                        authenticationViewModel.finishMultiplayer(gameViewModel.earnedPoints)
+                        userViewModel.finishMultiplayer(gameViewModel.earnedPoints)
                     }
                     findNavController().navigate(GameFragmentDirections.actionGameFragmentToHomeFragment())
                     return
@@ -151,10 +159,10 @@ class GameFragment : Fragment() {
     }
 
     private fun bonusTime() {
-        if(authenticationViewModel.currentUser?.points!! < 1) {
+        if(userViewModel.currentUser?.points!! < 1) {
             Toast.makeText(context, "Not enough points", Toast.LENGTH_SHORT).show()
         } else {
-            authenticationViewModel.updatePoints(-1)
+            userViewModel.updatePoints(-1)
             countDownTimer.cancel()
             timeLeftInMillis += COUNTDOWN
             startCountDown()
@@ -163,10 +171,10 @@ class GameFragment : Fragment() {
     }
 
     private fun bonusFifty() {
-        if(authenticationViewModel.currentUser?.points!! < 2) {
+        if(userViewModel.currentUser?.points!! < 2) {
             Toast.makeText(context, "Not enough points", Toast.LENGTH_SHORT).show()
         } else {
-            authenticationViewModel.updatePoints(-2)
+            userViewModel.updatePoints(-2)
             val toHide = gameViewModel.getBonusFifty()
             when(toHide[0]) {
                 binding.answer1.text -> binding.answer1.visibility = View.INVISIBLE

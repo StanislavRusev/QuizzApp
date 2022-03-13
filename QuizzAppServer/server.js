@@ -119,7 +119,8 @@ mongoClient.connect(url, function(err, db) {
             name: req.body.name,
             enemy: "",
             status: "waiting",
-            points: 0  
+            points: 0,
+            enemyPoints: 0  
         }
 
         multiplayer.findOne({status: "waiting"}, function(err, result) {
@@ -172,9 +173,23 @@ mongoClient.connect(url, function(err, db) {
     })
 
     app.post("/finishMultiplayer", function(req, res) {
-        var update = { $set: {status: "finished", points: parseInt(req.body.points)}};
-        multiplayer.updateOne({name: req.body.name}, update, function(err, resultUpdate) {
-            res.status(200).send();
+        multiplayer.findOne({name: req.body.name}, function(err, resultFind) {
+            var updateFinished = { $set: {status: "finished", points: parseInt(req.body.points)}};
+            var updateEnemy = { $set: {enemyPoints: parseInt(req.body.points)}};
+            multiplayer.updateOne({name: resultFind.enemy}, updateEnemy, function(err, updateEnemyResult){})
+            multiplayer.updateOne({name: resultFind.name}, updateFinished, function(err, resultUpdate) {
+                res.status(200).send();
+            })
+        })
+    })
+
+    app.post("/getEnemyPoints", function(req, res) {
+        multiplayer.findOne({name: req.body.name}, function(err, resultFind) {
+            if(resultFind != null) {
+                res.status(200).send(JSON.stringify(resultFind.enemyPoints));
+            } else {
+                res.status(404).send()
+            }
         })
     })
 })

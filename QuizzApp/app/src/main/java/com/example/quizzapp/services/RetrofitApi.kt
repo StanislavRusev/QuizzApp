@@ -42,4 +42,7 @@ interface RetrofitApi {
 
     @POST("finishMultiplayer")
     fun finishMultiplayer(@Body map: Map<String, String>): Call<Unit>
+
+    @POST("getEnemyPoints")
+    fun getEnemyPoints(@Body map: Map<String, String>): Call<Int>
 }

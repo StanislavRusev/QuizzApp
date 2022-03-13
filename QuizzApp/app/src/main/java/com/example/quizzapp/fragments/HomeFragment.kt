@@ -2,6 +2,7 @@ package com.example.quizzapp.fragments
 
 import android.app.AlertDialog
 import android.app.Dialog
+import android.content.DialogInterface
 import android.os.Bundle
 import android.os.Handler
 import androidx.fragment.app.Fragment
@@ -13,7 +14,7 @@ import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import com.example.quizzapp.R
 import com.example.quizzapp.databinding.FragmentHomeBinding
-import com.example.quizzapp.model.AuthenticationViewModel
+import com.example.quizzapp.model.UserViewModel
 import com.example.quizzapp.model.GameViewModel
 import com.example.quizzapp.model.Status
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
@@ -21,7 +22,7 @@ import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
-    private val authenticationViewModel: AuthenticationViewModel by sharedViewModel()
+    private val userViewModel: UserViewModel by sharedViewModel()
     private val gameViewModel: GameViewModel by sharedViewModel()
     private lateinit var dialog: AlertDialog
 
@@ -36,7 +37,7 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.profile.text = authenticationViewModel.currentUser?.name?.get(0).toString()
+        binding.profile.text = userViewModel.currentUser?.name?.get(0).toString()
 
         binding.profile.setOnClickListener {
             findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToProfileFragment())
@@ -47,11 +48,11 @@ class HomeFragment : Fragment() {
         }
 
         binding.playMultiplayer.setOnClickListener {
-            authenticationViewModel.joinMultiplayer()
+            userViewModel.joinMultiplayer()
         }
 
         binding.leaderboard.setOnClickListener {
-            authenticationViewModel.getAllUsers()
+            userViewModel.getAllUsers()
         }
 
         gameViewModel.status.observe(viewLifecycleOwner
@@ -72,22 +73,22 @@ class HomeFragment : Fragment() {
             }
         }
 
-        authenticationViewModel.status.observe(viewLifecycleOwner
+        userViewModel.status.observe(viewLifecycleOwner
         ) { status ->
             when (status) {
                 Status.RECEIVED_USERS -> {
                     findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToLeaderboardFragment())
-                    authenticationViewModel.setNormalStatus()
+                    userViewModel.setNormalStatus()
                 }
 
                 Status.ERROR -> {
-                    authenticationViewModel.setNormalStatus()
+                    userViewModel.setNormalStatus()
                 }
 
                 Status.WAITING -> {
                     waitingDialogBuilder("Waiting for another player to join")
                     makeCall()
-                    authenticationViewModel.setNormalStatus()
+                    userViewModel.setNormalStatus()
                 }
 
                 Status.PLAYING -> {
@@ -95,20 +96,25 @@ class HomeFragment : Fragment() {
                     gameViewModel.setGameMode("easyBiology")
                     gameViewModel.setupQuestions()
                     gameViewModel.gameType = "multiplayer"
-                    authenticationViewModel.setNormalStatus()
+                    userViewModel.setNormalStatus()
                 }
 
                 Status.ONE_FINISHED -> {
                     waitingDialogBuilder("Waiting for opponent to finish")
                     makeCall()
-                    authenticationViewModel.setNormalStatus()
+                    userViewModel.setNormalStatus()
                 }
 
                 Status.ALL_FINISHED -> {
                     dialog.dismiss()
-                    Toast.makeText(context,"Everyone finished", Toast.LENGTH_SHORT).show()
-                    authenticationViewModel.removeMultiplayer()
-                    authenticationViewModel.setNormalStatus()
+                    userViewModel.setNormalStatus()
+                    userViewModel.getEnemyPoints()
+                    userViewModel.removeMultiplayer()
+                }
+
+                Status.SHOW_RESULTS -> {
+                    resultDialogBuilder()
+                    userViewModel.setNormalStatus()
                 }
 
                 else -> {
@@ -144,9 +150,27 @@ class HomeFragment : Fragment() {
     private fun waitingDialogBuilder(title: String) {
         dialog.setTitle(title)
         dialog.setButton(Dialog.BUTTON_NEUTRAL, "Cancel"
-        ) { _, _ -> authenticationViewModel.removeMultiplayer() }
+        ) { _, _ -> userViewModel.removeMultiplayer() }
 
         dialog.show()
+    }
+
+    private fun resultDialogBuilder() {
+        val resultDialog = AlertDialog.Builder(context).create()
+        when {
+            gameViewModel.earnedPoints > userViewModel.enemyPoints -> {
+                resultDialog.setTitle("Winner")
+            }
+            gameViewModel.earnedPoints == userViewModel.enemyPoints -> {
+                resultDialog.setTitle("Draw")
+            }
+            else -> {
+                resultDialog.setTitle("Loser")
+            }
+        }
+        resultDialog.setMessage("You got " + gameViewModel.earnedPoints + " and the enemy got " + userViewModel.enemyPoints)
+        resultDialog.setButton(Dialog.BUTTON_NEUTRAL, "OK") { _: DialogInterface, _: Int -> }
+        resultDialog.show()
     }
 
     private fun setupQuestions(dialog: Dialog, mode: String) {
@@ -159,7 +183,7 @@ class HomeFragment : Fragment() {
         val handler = Handler()
 
         val runnable = Runnable {
-            authenticationViewModel.checkStatus()
+            userViewModel.checkStatus()
         }
 
         handler.postDelayed(runnable, 3000)

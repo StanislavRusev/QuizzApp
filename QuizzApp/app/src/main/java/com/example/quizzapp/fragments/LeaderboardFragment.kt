@@ -7,16 +7,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.quizzapp.databinding.FragmentHomeBinding
 import com.example.quizzapp.databinding.FragmentLeaderboardBinding
-import com.example.quizzapp.model.AuthenticationViewModel
+import com.example.quizzapp.model.UserViewModel
 import com.example.quizzapp.recyclerview.UserAdapter
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class LeaderboardFragment : Fragment() {
     private var _binding: FragmentLeaderboardBinding? = null
     private val binding get() = _binding!!
-    private val authenticationViewModel: AuthenticationViewModel by sharedViewModel()
+    private val userViewModel: UserViewModel by sharedViewModel()
     private lateinit var recyclerView: RecyclerView
 
     override fun onCreateView(
@@ -33,7 +32,7 @@ class LeaderboardFragment : Fragment() {
 
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.setHasFixedSize(true)
-        recyclerView.adapter = UserAdapter(authenticationViewModel.allUsers!!)
+        recyclerView.adapter = UserAdapter(userViewModel.allUsers!!)
     }
 
     override fun onDestroyView() {

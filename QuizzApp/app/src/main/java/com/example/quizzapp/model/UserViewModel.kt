@@ -2,13 +2,14 @@ package com.example.quizzapp.model
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import com.example.quizzapp.repositories.AuthenticationRepository
+import com.example.quizzapp.repositories.UserRepository
 import com.example.quizzapp.services.User
 
-class AuthenticationViewModel (private val repository: AuthenticationRepository): ViewModel() {
+class UserViewModel (private val repository: UserRepository): ViewModel() {
     val currentUser get() = repository.currentUser
     val status: LiveData<Status> = repository.status
     val allUsers get() = repository.allUsers
+    val enemyPoints get() = repository.enemyPoints
 
     fun registerUser(username: String, password: String, confirmPassword: String) {
         repository.registerUser(username, password, confirmPassword)
@@ -64,6 +65,10 @@ class AuthenticationViewModel (private val repository: AuthenticationRepository)
 
     fun finishMultiplayer(points: Int) {
         repository.finishMultiplayer(points)
+    }
+
+    fun getEnemyPoints() {
+        repository.getEnemyPoints()
     }
 
 }

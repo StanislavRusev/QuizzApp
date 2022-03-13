@@ -10,13 +10,13 @@ import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import com.example.quizzapp.R
 import com.example.quizzapp.databinding.FragmentProfileBinding
-import com.example.quizzapp.model.AuthenticationViewModel
+import com.example.quizzapp.model.UserViewModel
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class ProfileFragment : Fragment() {
     private var _binding: FragmentProfileBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: AuthenticationViewModel by sharedViewModel()
+    private val userViewModel: UserViewModel by sharedViewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -29,9 +29,9 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.userTextView.text = getString(R.string.username, viewModel.currentUser?.name)
-        binding.points.text = getString(R.string.points, viewModel.currentUser?.points)
-        binding.title.text = getString(R.string.title, viewModel.getTitle(viewModel.currentUser!!))
+        binding.userTextView.text = getString(R.string.username, userViewModel.currentUser?.name)
+        binding.points.text = getString(R.string.points, userViewModel.currentUser?.points)
+        binding.title.text = getString(R.string.title, userViewModel.getTitle(userViewModel.currentUser!!))
 
         binding.signOut.setOnClickListener {
             signOutConfirmation()
@@ -56,7 +56,7 @@ class ProfileFragment : Fragment() {
     }
 
     private fun signOut() {
-        viewModel.clearCurrentUser()
+        userViewModel.clearCurrentUser()
         findNavController().navigate(ProfileFragmentDirections.actionProfileFragmentToLoginFragment())
     }
 

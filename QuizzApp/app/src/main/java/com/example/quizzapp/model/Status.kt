@@ -10,5 +10,6 @@ enum class Status {
     WAITING,
     PLAYING,
     ONE_FINISHED,
-    ALL_FINISHED
+    ALL_FINISHED,
+    SHOW_RESULTS
 }

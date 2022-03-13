@@ -1,8 +1,8 @@
 package com.example.quizzapp.di
 
-import com.example.quizzapp.model.AuthenticationViewModel
+import com.example.quizzapp.model.UserViewModel
 import com.example.quizzapp.model.GameViewModel
-import com.example.quizzapp.repositories.AuthenticationRepository
+import com.example.quizzapp.repositories.UserRepository
 import com.example.quizzapp.repositories.GameRepository
 import com.example.quizzapp.services.RetrofitApi
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -11,6 +11,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 const val URL = "http://10.0.2.2:8080/"
+const val PHONE_URL = ""
 
 val apiModels = module {
     single { provideRetrofit() }
@@ -18,13 +19,13 @@ val apiModels = module {
 }
 
 val repositoryModules = module {
-    single { AuthenticationRepository(get()) }
+    single { UserRepository(get()) }
     single { GameRepository(get()) }
 }
 
 val viewModels = module {
-    viewModel { AuthenticationViewModel(get()) }
-    viewModel {GameViewModel(get())}
+    viewModel { UserViewModel(get()) }
+    viewModel { GameViewModel(get()) }
 }
 
 fun provideRetrofit(): Retrofit {

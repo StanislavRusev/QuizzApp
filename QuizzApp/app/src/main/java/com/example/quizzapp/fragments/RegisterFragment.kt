@@ -8,14 +8,14 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import com.example.quizzapp.databinding.FragmentRegisterBinding
-import com.example.quizzapp.model.AuthenticationViewModel
+import com.example.quizzapp.model.UserViewModel
 import com.example.quizzapp.model.Status
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class RegisterFragment : Fragment() {
     private var _binding: FragmentRegisterBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: AuthenticationViewModel by sharedViewModel()
+    private val userViewModel: UserViewModel by sharedViewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -33,20 +33,20 @@ class RegisterFragment : Fragment() {
             val password = binding.password.text.toString()
             val confPass = binding.confirmPassword.text.toString()
 
-            viewModel.registerUser(username, password, confPass)
+            userViewModel.registerUser(username, password, confPass)
         }
 
-        viewModel.status.observe(viewLifecycleOwner
+        userViewModel.status.observe(viewLifecycleOwner
         ) { status ->
             when (status) {
                 Status.SUCCESS -> {
                     findNavController().navigate(RegisterFragmentDirections.actionRegisterFragmentToLoginFragment())
-                    viewModel.setNormalStatus()
+                    userViewModel.setNormalStatus()
                 }
 
                 Status.ERROR -> {
                     invalidData()
-                    viewModel.setNormalStatus()
+                    userViewModel.setNormalStatus()
                 }
 
                 else -> {

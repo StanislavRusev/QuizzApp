@@ -9,7 +9,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.quizzapp.databinding.FragmentLoginBinding
-import com.example.quizzapp.model.AuthenticationViewModel
+import com.example.quizzapp.model.UserViewModel
 import com.example.quizzapp.model.Status
 import com.facebook.*
 import com.facebook.login.LoginManager
@@ -28,7 +28,7 @@ const val RC_GOOGLE = 1000
 class LoginFragment : Fragment() {
     private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: AuthenticationViewModel by sharedViewModel()
+    private val userViewModel: UserViewModel by sharedViewModel()
     private lateinit var callbackManager: CallbackManager
     private lateinit var gso: GoogleSignInOptions
     private lateinit var mGoogleSignInClient: GoogleSignInClient
@@ -52,20 +52,20 @@ class LoginFragment : Fragment() {
             val username = binding.username.text.toString()
             val password = binding.password.text.toString()
 
-            viewModel.loginUser(username, password)
+            userViewModel.loginUser(username, password)
         }
 
-        viewModel.status.observe(viewLifecycleOwner
+        userViewModel.status.observe(viewLifecycleOwner
         ) { status ->
             when (status) {
                 Status.SUCCESS -> {
                     findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToHomeFragment())
-                    viewModel.setNormalStatus()
+                    userViewModel.setNormalStatus()
                 }
 
                 Status.ERROR -> {
                     invalidData()
-                    viewModel.setNormalStatus()
+                    userViewModel.setNormalStatus()
                 }
 
                 else -> {
@@ -90,7 +90,7 @@ class LoginFragment : Fragment() {
                     val name = obj?.getString("name")
                     val id = obj?.getString("id")
 
-                    viewModel.getSocialMedia(name!!, id!!, "facebook")
+                    userViewModel.getSocialMedia(name!!, id!!, "facebook")
                 }
 
                 val bundle = Bundle()
@@ -139,7 +139,7 @@ class LoginFragment : Fragment() {
 
             try {
                 val account: GoogleSignInAccount = task.getResult(ApiException::class.java)
-                viewModel.getSocialMedia(account.displayName!!, account.id!!, "google")
+                userViewModel.getSocialMedia(account.displayName!!, account.id!!, "google")
                 mGoogleSignInClient.signOut()
             } catch (e: ApiException) {
                 println("failed")

@@ -18,13 +18,15 @@ const val DATE = "date"
 const val PLAYED = "gamesPlayedToday"
 const val TYPE = "type"
 
-class AuthenticationRepository (private val retrofit: RetrofitApi) {
+class UserRepository (private val retrofit: RetrofitApi) {
     private var _currentUser: User? = null
     val currentUser get() = _currentUser
     private var _status = MutableLiveData<Status>()
     val status: LiveData<Status> = _status
     private var _allUsers: List<User>? = null
     val allUsers get() = _allUsers
+    private var _enemyPoints: Int = 0
+    val enemyPoints get() = _enemyPoints
 
     fun registerUser(username: String, password: String, confirmPassword: String) {
         if(password != confirmPassword || username == "" || password == "") {
@@ -261,6 +263,28 @@ class AuthenticationRepository (private val retrofit: RetrofitApi) {
             }
 
             override fun onFailure(call: Call<Unit>, t: Throwable) {
+                TODO("Not yet implemented")
+            }
+
+        })
+    }
+
+    fun getEnemyPoints() {
+        val body = mutableMapOf<String, String>()
+
+        body.put(NAME, _currentUser?.name.toString())
+
+        val requestCall = retrofit.getEnemyPoints(body)
+
+        requestCall.enqueue(object: Callback<Int> {
+            override fun onResponse(call: Call<Int>, response: Response<Int>) {
+                if(response.isSuccessful) {
+                    _enemyPoints = response.body() ?: 0
+                    _status.value = Status.SHOW_RESULTS
+                }
+            }
+
+            override fun onFailure(call: Call<Int>, t: Throwable) {
                 TODO("Not yet implemented")
             }
 
