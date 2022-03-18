@@ -5,6 +5,7 @@ import android.app.Dialog
 import android.content.DialogInterface
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -25,6 +26,8 @@ class HomeFragment : Fragment() {
     private val userViewModel: UserViewModel by sharedViewModel()
     private val gameViewModel: GameViewModel by sharedViewModel()
     private lateinit var dialog: AlertDialog
+    private val runnable = Runnable{ userViewModel.checkStatus() }
+    private val handler = Handler(Looper.getMainLooper())
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -132,6 +135,7 @@ class HomeFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+        handler.removeCallbacks(runnable)
     }
 
     private fun gameModeDialogBuilder() {
@@ -180,12 +184,6 @@ class HomeFragment : Fragment() {
     }
 
     private fun makeCall() {
-        val handler = Handler()
-
-        val runnable = Runnable {
-            userViewModel.checkStatus()
-        }
-
         handler.postDelayed(runnable, 3000)
     }
 
