@@ -22,9 +22,9 @@ var hardBiology = {
 mongoClient.connect(url, function (err, db) {
     if (err) throw err;
 
-    const myDb = db.db("testdb");
-    const easy = myDb.collection("questions");
-    const hard = myDb.collection("hard");
+    const myDb = db.db("QuizzApp");
+    const easy = myDb.collection("easyBiology");
+    const hard = myDb.collection("hardBiology");
 
     fs.createReadStream('biologyEasy.csv')
         .pipe(csv())

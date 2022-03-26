@@ -8,10 +8,10 @@ app.use(express.json());
 mongoClient.connect(url, function(err, db) {
     if(err) throw err;
 
-    const myDb = db.db("testdb");
-    const collection = myDb.collection("users");
-    const easyBiologyCollection = myDb.collection("questions");
-    const hardBiologyCollection = myDb.collection("hard");
+    const myDb = db.db("QuizzApp");
+    const userCollection = myDb.collection("users");
+    const easyBiologyCollection = myDb.collection("easyBiology");
+    const hardBiologyCollection = myDb.collection("hardBiology");
     const multiplayer = myDb.collection("multiplayer");
 
     app.post("/register", function(req, res) {
@@ -24,9 +24,9 @@ mongoClient.connect(url, function(err, db) {
             type: "normal"
         }
         
-        collection.findOne({name: req.body.name}, function(err, result) {
+        userCollection.findOne({name: req.body.name}, function(err, result) {
             if(result == null) {
-                collection.insertOne(user, function(err, result) {
+                userCollection.insertOne(user, function(err, result) {
                     res.status(200).send();
                 })
             } else {
@@ -42,7 +42,7 @@ mongoClient.connect(url, function(err, db) {
             type: "normal"
         }
 
-        collection.findOne(user, function(err, result) {
+        userCollection.findOne(user, function(err, result) {
             if(result != null) {
                 const userResult = {
                     name: result.name,
@@ -73,20 +73,20 @@ mongoClient.connect(url, function(err, db) {
 
     app.post("/update", function(req, res) {
         var newPoints = { $set: { points: parseInt(req.body.points) }};
-        collection.updateOne({ name: req.body.name }, newPoints, function(err, result) {
+        userCollection.updateOne({ name: req.body.name }, newPoints, function(err, result) {
             res.status(200).send();
         })
     })
 
     app.get("/users", function(req, res) {
-        collection.find({}, {projection: {_id:0, name: 1, points: 1}}).sort({points : -1}).toArray(function(err, result) {
+        userCollection.find({}, {projection: {_id:0, name: 1, points: 1}}).sort({points : -1}).toArray(function(err, result) {
             res.status(200).send(JSON.stringify(result));
         }) 
     })
 
     app.post("/updateLastPlayed", function(req, res) {
         var newDate = { $set: {date: req.body.date, gamesPlayedToday: parseInt(req.body.gamesPlayedToday)}};
-        collection.updateOne({ name: req.body.name }, newDate, function(err, result) {
+        userCollection.updateOne({ name: req.body.name }, newDate, function(err, result) {
             res.status(200).send();
         })
     })
@@ -101,17 +101,15 @@ mongoClient.connect(url, function(err, db) {
             type: req.body.type
         }
 
-        collection.findOne({name: req.body.name, password: req.body.password, type: req.body.type}, function(err, result) {
+        userCollection.findOne({name: req.body.name, password: req.body.password, type: req.body.type}, function(err, result) {
             if(result == null) {
-                collection.insertOne(user, function(err, result) {
+                userCollection.insertOne(user, function(err, result) {
                     res.status(200).send(user);
                 })
             } else {
                 res.status(200).send(result);
             }
         })
-
-
     })
 
     app.post("/addMultiplayer", function(req, res) {
