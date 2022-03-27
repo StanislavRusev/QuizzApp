@@ -88,21 +88,13 @@ class GameFragment : Fragment() {
             Toast.makeText(context, "Incorrect", Toast.LENGTH_SHORT).show()
         }
         if(!gameViewModel.toNextQuestion()) {
-            Toast.makeText(context, "You got " + gameViewModel.earnedPoints + " points", Toast.LENGTH_SHORT).show()
-            if(canEarnPoints) {
-                userViewModel.updatePoints(gameViewModel.earnedPoints)
-            }
-            if(gameViewModel.gameType == "multiplayer") {
-                gameViewModel.gameType = "singleplayer"
-                userViewModel.finishMultiplayer(gameViewModel.earnedPoints)
-            }
+            finishGame()
             findNavController().navigate(GameFragmentDirections.actionGameFragmentToHomeFragment())
             return
         }
         countDownTimer.cancel()
         setupQuestion()
     }
-
 
     private fun setupQuestion() {
         timeLeftInMillis = COUNTDOWN
@@ -133,14 +125,7 @@ class GameFragment : Fragment() {
                 timeLeftInMillis = 0
                 updateTimer()
                 if(!gameViewModel.toNextQuestion()) {
-                    Toast.makeText(context, "You got " + gameViewModel.earnedPoints + " right", Toast.LENGTH_SHORT).show()
-                    if(canEarnPoints) {
-                        userViewModel.updatePoints(gameViewModel.earnedPoints)
-                    }
-                    if(gameViewModel.gameType == "multiplayer") {
-                        gameViewModel.gameType = "singleplayer"
-                        userViewModel.finishMultiplayer(gameViewModel.earnedPoints)
-                    }
+                    finishGame()
                     findNavController().navigate(GameFragmentDirections.actionGameFragmentToHomeFragment())
                     return
                 }
@@ -175,21 +160,31 @@ class GameFragment : Fragment() {
             Toast.makeText(context, "Not enough points", Toast.LENGTH_SHORT).show()
         } else {
             userViewModel.updatePoints(-2)
-            val toHide = gameViewModel.getBonusFifty()
-            when(toHide[0]) {
-                binding.answer1.text -> binding.answer1.visibility = View.INVISIBLE
-                binding.answer2.text -> binding.answer2.visibility = View.INVISIBLE
-                binding.answer3.text -> binding.answer3.visibility = View.INVISIBLE
-                binding.answer4.text -> binding.answer4.visibility = View.INVISIBLE
-            }
-            when(toHide[1]) {
-                binding.answer1.text -> binding.answer1.visibility = View.INVISIBLE
-                binding.answer2.text -> binding.answer2.visibility = View.INVISIBLE
-                binding.answer3.text -> binding.answer3.visibility = View.INVISIBLE
-                binding.answer4.text -> binding.answer4.visibility = View.INVISIBLE
-            }
+            val questionsToHide = gameViewModel.getBonusFifty()
+            hideWrongAnswer(questionsToHide[0])
+            hideWrongAnswer(questionsToHide[1])
             binding.fifty.visibility = View.INVISIBLE
 
+        }
+    }
+
+    private fun hideWrongAnswer(toHide: String) {
+        when(toHide) {
+            binding.answer1.text -> binding.answer1.visibility = View.INVISIBLE
+            binding.answer2.text -> binding.answer2.visibility = View.INVISIBLE
+            binding.answer3.text -> binding.answer3.visibility = View.INVISIBLE
+            binding.answer4.text -> binding.answer4.visibility = View.INVISIBLE
+        }
+    }
+
+    private fun finishGame() {
+        Toast.makeText(context, "You got " + gameViewModel.earnedPoints + " points", Toast.LENGTH_SHORT).show()
+        if(canEarnPoints) {
+            userViewModel.updatePoints(gameViewModel.earnedPoints)
+        }
+        if(gameViewModel.gameType == "multiplayer") {
+            gameViewModel.gameType = "singleplayer"
+            userViewModel.finishMultiplayer(gameViewModel.earnedPoints)
         }
     }
 
