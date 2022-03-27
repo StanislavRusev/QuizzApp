@@ -59,14 +59,14 @@ mongoClient.connect(url, function(err, db) {
 
     app.get("/easyBiology", function(req, res) {
         easyBiologyCollection.find({}, {projection: {_id: 0, question: 1, distractors: 1, answer: 1 }}).toArray(function(err, result) {
-            var resultQuestions = getQuestions(result.length, result, 10);
+            var resultQuestions = getQuestions(result, 10);
             res.status(200).send(JSON.stringify(resultQuestions));
         })
     })
 
     app.get("/hardBiology", function(req, res) {
         hardBiologyCollection.find({}, {projection: {_id: 0, question: 1, distractors: 1, answer: 1 }}).toArray(function(err, result) {
-            var resultQuestions = getQuestions(result.length, result, 5);
+            var resultQuestions = getQuestions(result, 5);
             res.status(200).send(JSON.stringify(resultQuestions));
         })
     })
@@ -200,12 +200,12 @@ function randomNumberGenerate(max) {
     return Math.floor(Math.random() * (max));
 }
 
-function getQuestions(max, questions, totalCount) {
+function getQuestions(questions, totalCount) {
     var indexes = new Set();
     var result = new Array();
 
     while(indexes.size != totalCount) {
-        indexes.add(randomNumberGenerate(max));
+        indexes.add(randomNumberGenerate(questions.length));
     }
 
     for(i of indexes) {
