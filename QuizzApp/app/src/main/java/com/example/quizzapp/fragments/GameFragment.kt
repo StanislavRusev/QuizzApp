@@ -1,7 +1,10 @@
 package com.example.quizzapp.fragments
 
+import android.graphics.Color
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.os.Handler
+import android.os.Looper
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -23,6 +26,9 @@ class GameFragment : Fragment() {
     private lateinit var countDownTimer: CountDownTimer
     private var timeLeftInMillis: Long = COUNTDOWN
     private var canEarnPoints: Boolean = true
+    private val runnable = Runnable { setupQuestion() }
+    private val handler = Handler(Looper.getMainLooper())
+    private var canAnswer = true
 
 
     override fun onCreateView(
@@ -65,7 +71,7 @@ class GameFragment : Fragment() {
         }
 
         binding.fifty.setOnClickListener {
-            bonusFifty()
+            bonusFiftyFifty()
         }
 
     }
@@ -78,22 +84,31 @@ class GameFragment : Fragment() {
             gameViewModel.gameType = "singleplayer"
             userViewModel.finishMultiplayer(0)
         }
+        handler.removeCallbacks(runnable)
     }
 
     private fun chooseAnswer(answer: String) {
+        if(!canAnswer) {
+            return
+        }
+        canAnswer = false
+
         if(gameViewModel.isRightAnswer(answer)) {
-            Toast.makeText(context, "Correct", Toast.LENGTH_SHORT).show()
+            colorAnswers(answer, Color.GREEN)
             gameViewModel.addPoints()
         } else {
-            Toast.makeText(context, "Incorrect", Toast.LENGTH_SHORT).show()
+            colorAnswers(answer, Color.RED)
+            colorAnswers(gameViewModel.getRightAnswer(), Color.GREEN)
         }
+
         if(!gameViewModel.toNextQuestion()) {
             finishGame()
             findNavController().navigate(GameFragmentDirections.actionGameFragmentToHomeFragment())
             return
         }
+
         countDownTimer.cancel()
-        setupQuestion()
+        handler.postDelayed(runnable, 2000)
     }
 
     private fun setupQuestion() {
@@ -110,8 +125,12 @@ class GameFragment : Fragment() {
         binding.answer2.text = distractors[1]
         binding.answer3.text = distractors[2]
         binding.answer4.text = distractors[3]
+        binding.answer1.setBackgroundColor(Color.BLUE)
+        binding.answer2.setBackgroundColor(Color.BLUE)
+        binding.answer3.setBackgroundColor(Color.BLUE)
+        binding.answer4.setBackgroundColor(Color.BLUE)
         binding.fifty.visibility = View.VISIBLE
-
+        canAnswer = true
     }
 
     private fun startCountDown() {
@@ -144,6 +163,9 @@ class GameFragment : Fragment() {
     }
 
     private fun bonusTime() {
+        if(!canAnswer) {
+            return
+        }
         if(userViewModel.currentUser?.points!! < 1) {
             Toast.makeText(context, "Not enough points", Toast.LENGTH_SHORT).show()
         } else {
@@ -155,12 +177,15 @@ class GameFragment : Fragment() {
         }
     }
 
-    private fun bonusFifty() {
+    private fun bonusFiftyFifty() {
+        if(!canAnswer) {
+            return
+        }
         if(userViewModel.currentUser?.points!! < 2) {
             Toast.makeText(context, "Not enough points", Toast.LENGTH_SHORT).show()
         } else {
             userViewModel.updatePoints(-2)
-            val questionsToHide = gameViewModel.getBonusFifty()
+            val questionsToHide = gameViewModel.getBonusFiftyFifty()
             hideWrongAnswer(questionsToHide[0])
             hideWrongAnswer(questionsToHide[1])
             binding.fifty.visibility = View.INVISIBLE
@@ -185,6 +210,15 @@ class GameFragment : Fragment() {
         if(gameViewModel.gameType == "multiplayer") {
             gameViewModel.gameType = "singleplayer"
             userViewModel.finishMultiplayer(gameViewModel.earnedPoints)
+        }
+    }
+
+    private fun colorAnswers(answer: String, color: Int) {
+        when(answer) {
+            binding.answer1.text -> binding.answer1.setBackgroundColor(color)
+            binding.answer2.text -> binding.answer2.setBackgroundColor(color)
+            binding.answer3.text -> binding.answer3.setBackgroundColor(color)
+            binding.answer4.text -> binding.answer4.setBackgroundColor(color)
         }
     }
 

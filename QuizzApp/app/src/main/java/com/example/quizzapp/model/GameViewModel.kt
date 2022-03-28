@@ -38,11 +38,15 @@ class GameViewModel (private val repository: GameRepository): ViewModel() {
         return currentQuestions[numberOfCurrentQuestion].answer == answer
     }
 
+    fun getRightAnswer(): String {
+        return currentQuestions[numberOfCurrentQuestion].answer
+    }
+
     fun addPoints() {
         repository.addPoints()
     }
 
-    fun getBonusFifty(): MutableList<String> {
+    fun getBonusFiftyFifty(): MutableList<String> {
         val distractors = currentQuestions[numberOfCurrentQuestion].distractors.toMutableList()
         distractors.remove(currentQuestions[numberOfCurrentQuestion].answer)
         distractors.shuffle()
