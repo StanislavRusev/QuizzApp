@@ -22,4 +22,11 @@
     <string name="points_leaderboard">"Точки: "</string>
     <string name="gamemode_biology_easy">Биология - лесно</string>
     <string name="gamemode_biology_hard">Биология - трудно</string>
+    <string name="multiplayer_waiting_join">Изчакване на присъединяване на играч</string>
+    <string name="multiplayer_waiting_finish">Изчаква се опонентът да приключи</string>
+    <string name="cancel">Откажи</string>
+    <string name="winner">Победа</string>
+    <string name="loser">Загуба</string>
+    <string name="draw">Равенство</string>
+    <string name="multiplayer_result">Ти получи %1$d точки, а противникът %2$d</string>
 </resources>

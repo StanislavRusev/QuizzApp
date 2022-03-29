@@ -27,6 +27,14 @@
     <string name="gamemode_biology_easy">Biology - easy</string>
     <string name="gamemode_biology_hard">Biology - hard</string>
 
+    <string name="multiplayer_waiting_join">Waiting for another player to join</string>
+    <string name="multiplayer_waiting_finish">Waiting for opponent to finish</string>
+    <string name="cancel">Cancel</string>
+    <string name="winner">Winner</string>
+    <string name="loser">Loser</string>
+    <string name="draw">Draw</string>
+    <string name="multiplayer_result">You got %1$d points and the enemy got %2$d</string>
+
     <string name="facebook_app_id" translatable="false">378184364307458</string>
     <string name="fb_login_protocol_scheme" translatable="false">fb378184364307458</string>
     <string name="facebook_client_token" translatable="false"></string>

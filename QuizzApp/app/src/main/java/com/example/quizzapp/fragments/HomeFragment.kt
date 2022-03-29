@@ -89,7 +89,7 @@ class HomeFragment : Fragment() {
                 }
 
                 Status.WAITING -> {
-                    waitingDialogBuilder("Waiting for another player to join")
+                    waitingDialogBuilder(getString(R.string.multiplayer_waiting_join))
                     makeCall()
                     userViewModel.setNormalStatus()
                 }
@@ -103,7 +103,7 @@ class HomeFragment : Fragment() {
                 }
 
                 Status.ONE_FINISHED -> {
-                    waitingDialogBuilder("Waiting for opponent to finish")
+                    waitingDialogBuilder(getString(R.string.multiplayer_waiting_finish))
                     makeCall()
                     userViewModel.setNormalStatus()
                 }
@@ -153,7 +153,7 @@ class HomeFragment : Fragment() {
 
     private fun waitingDialogBuilder(title: String) {
         dialog.setTitle(title)
-        dialog.setButton(Dialog.BUTTON_NEUTRAL, "Cancel"
+        dialog.setButton(Dialog.BUTTON_NEUTRAL, getString(R.string.cancel)
         ) { _, _ -> userViewModel.removeMultiplayer() }
 
         dialog.show()
@@ -163,16 +163,16 @@ class HomeFragment : Fragment() {
         val resultDialog = AlertDialog.Builder(context).create()
         when {
             gameViewModel.earnedPoints > userViewModel.enemyPoints -> {
-                resultDialog.setTitle("Winner")
+                resultDialog.setTitle(getString(R.string.winner))
             }
             gameViewModel.earnedPoints == userViewModel.enemyPoints -> {
-                resultDialog.setTitle("Draw")
+                resultDialog.setTitle(getString(R.string.draw))
             }
             else -> {
-                resultDialog.setTitle("Loser")
+                resultDialog.setTitle(getString(R.string.loser))
             }
         }
-        resultDialog.setMessage("You got " + gameViewModel.earnedPoints + " and the enemy got " + userViewModel.enemyPoints)
+        resultDialog.setMessage(getString(R.string.multiplayer_result, gameViewModel.earnedPoints, userViewModel.enemyPoints))
         resultDialog.setButton(Dialog.BUTTON_NEUTRAL, "OK") { _: DialogInterface, _: Int -> }
         resultDialog.show()
     }
