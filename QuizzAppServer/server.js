@@ -1,4 +1,5 @@
 const express = require("express");
+const bcrypt = require("bcrypt");
 const app = express();
 const mongoClient = require("mongodb").MongoClient;
 const url = "mongodb://localhost:27017/";
@@ -17,7 +18,7 @@ mongoClient.connect(url, function(err, db) {
     app.post("/register", function(req, res) {
         const user = {
             name: req.body.name,
-            password: req.body.password,
+            password: bcrypt.hashSync(req.body.password, 5),
             date: req.body.date,
             points: 0,
             gamesPlayedToday: 0,
@@ -38,19 +39,22 @@ mongoClient.connect(url, function(err, db) {
     app.post("/login", function(req, res) {
         const user = {
             name: req.body.name,
-            password: req.body.password,
             type: "normal"
         }
 
         userCollection.findOne(user, function(err, result) {
             if(result != null) {
-                const userResult = {
-                    name: result.name,
-                    points: result.points,
-                    date: result.date,
-                    gamesPlayedToday: result.gamesPlayedToday
+                if(!bcrypt.compareSync(req.body.password, result.password)) {
+                    res.status(404).send();
+                } else {
+                    const userResult = {
+                        name: result.name,
+                        points: result.points,
+                        date: result.date,
+                        gamesPlayedToday: result.gamesPlayedToday
+                    }
+                    res.status(200).send(JSON.stringify(userResult));         
                 }
-                res.status(200).send(JSON.stringify(userResult));
             } else {
                 res.status(404).send();
             }
