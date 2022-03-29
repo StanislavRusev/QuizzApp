@@ -11,7 +11,7 @@
         android:layout_marginRight="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Biology - Easy"
+        android:text="@string/gamemode_biology_easy"
         app:layout_constraintBottom_toTopOf="@+id/hardBiology"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -24,7 +24,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:text="Biology - Hard"
+        android:text="@string/gamemode_biology_hard"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/easyBiology" />

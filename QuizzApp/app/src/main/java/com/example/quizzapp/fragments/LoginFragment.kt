@@ -5,12 +5,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import android.widget.Toast
+import com.example.quizzapp.R
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.quizzapp.databinding.FragmentLoginBinding
-import com.example.quizzapp.model.UserViewModel
 import com.example.quizzapp.model.Status
+import com.example.quizzapp.model.UserViewModel
 import com.facebook.*
 import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
@@ -109,6 +111,10 @@ class LoginFragment : Fragment() {
 
         mGoogleSignInClient = GoogleSignIn.getClient(requireActivity(), gso)
 
+        val textView: TextView = binding.googleButton.getChildAt(0) as TextView
+        textView.text = getString(R.string.google)
+        textView.textSize = 16F
+        textView.setPadding(0, 0, 0, 0)
         binding.googleButton.setOnClickListener {
             val signInIntent = mGoogleSignInClient.signInIntent
             startActivityForResult(signInIntent, RC_GOOGLE)

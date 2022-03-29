@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">QuizzApp</string>
+    <string name="login">Влизане</string>
+    <string name="username_profile">Име: %1$s</string>
+    <string name="points_profile">Точки: %1$d</string>
+    <string name="title_profile">Титла: %1$s</string>
+    <string name="register">Регистрирай се</string>
+    <string name="facebook">Продължи с Facebook</string>
+    <string name="google">Продължи с Google</string>
+    <string name="username">Име</string>
+    <string name="password">Парола</string>
+    <string name="signout_profile">Излез от профила</string>
+    <string name="start_quiz">Започни тест</string>
+    <string name="start_race">Състезание</string>
+    <string name="leaderboard">Класация</string>
+    <string name="welcome">Добре дошли в QuizzApp</string>
+    <string name="bonus_time">Добави 20 секунди - 1 точка</string>
+    <string name="bonus_fiftyfifty">50/50 - 2 точки</string>
+    <string name="cant_earn_points">Не може да се печелят повече точки днес</string>
+    <string name="confirm_password">Повтори паролата</string>
+    <string name="points_leaderboard">"Точки: "</string>
+    <string name="gamemode_biology_easy">Биология - лесно</string>
+    <string name="gamemode_biology_hard">Биология - трудно</string>
+</resources>

@@ -29,9 +29,9 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.userTextView.text = getString(R.string.username, userViewModel.currentUser?.name)
-        binding.points.text = getString(R.string.points, userViewModel.currentUser?.points)
-        binding.title.text = getString(R.string.title, userViewModel.getTitle(userViewModel.currentUser!!))
+        binding.userTextView.text = getString(R.string.username_profile, userViewModel.currentUser?.name)
+        binding.points.text = getString(R.string.points_profile, userViewModel.currentUser?.points)
+        binding.title.text = getString(R.string.title_profile, userViewModel.getTitle(userViewModel.currentUser!!))
 
         binding.signOut.setOnClickListener {
             signOutConfirmation()

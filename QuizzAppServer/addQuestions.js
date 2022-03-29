@@ -23,8 +23,8 @@ mongoClient.connect(url, function (err, db) {
     if (err) throw err;
 
     const myDb = db.db("QuizzApp");
-    const easy = myDb.collection("easyBiology");
-    const hard = myDb.collection("hardBiology");
+    const easyBiologyCollection = myDb.collection("easyBiology");
+    const hardBiologyCollection = myDb.collection("hardBiology");
 
     fs.createReadStream('biologyEasy.csv')
         .pipe(csv())
@@ -32,7 +32,8 @@ mongoClient.connect(url, function (err, db) {
         .on('end', () => {
             easyBiology.allQuestions.push(easyBiology.fullQuestion);
 
-            easy.insertMany(easyBiology.allQuestions, function (err, res) {
+            easyBiologyCollection.drop();
+            easyBiologyCollection.insertMany(easyBiology.allQuestions, function (err, res) {
                 if (err) throw err;
                 console.log('CSV file successfully processed');
             })
@@ -44,7 +45,8 @@ mongoClient.connect(url, function (err, db) {
         .on('end', () => {
             hardBiology.allQuestions.push(hardBiology.fullQuestion);
 
-            hard.insertMany(hardBiology.allQuestions, function (err, res) {
+            hardBiologyCollection.drop();
+            hardBiologyCollection.insertMany(hardBiology.allQuestions, function (err, res) {
                 if (err) throw err;
                 console.log('CSV file successfully processed');
                 db.close();
