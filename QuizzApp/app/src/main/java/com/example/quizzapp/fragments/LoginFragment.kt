@@ -65,13 +65,22 @@ class LoginFragment : Fragment() {
                     userViewModel.setNormalStatus()
                 }
 
-                Status.ERROR -> {
-                    invalidData()
+                Status.ERROR_INVALID_LOGIN -> {
+                    invalidData("Invalid username/password")
                     userViewModel.setNormalStatus()
                 }
 
+                Status.ERROR_CANNOT_CONNECT -> {
+                    invalidData("Cannot connect to server")
+                    userViewModel.setNormalStatus()
+                }
+
+                Status.NORMAL -> {
+                    // everything is clear
+                }
+
                 else -> {
-                    // do nothing
+                    userViewModel.setNormalStatus()
                 }
             }
         }
@@ -123,10 +132,9 @@ class LoginFragment : Fragment() {
 
     }
 
-    private fun invalidData() {
-        binding.username.text = null
+    private fun invalidData(error: String) {
         binding.password.text = null
-        Toast.makeText(context, "Invalid data", Toast.LENGTH_SHORT).show()
+        Toast.makeText(context, error, Toast.LENGTH_SHORT).show()
     }
 
     override fun onDestroyView() {

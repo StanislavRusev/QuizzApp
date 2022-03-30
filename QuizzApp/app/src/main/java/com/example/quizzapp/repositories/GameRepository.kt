@@ -10,6 +10,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 const val POINTS_EASY_BIOLOGY = 3
+const val POINTS_HARD_BIOLOGY = 5
 
 class GameRepository (private val retrofit: RetrofitApi) {
     private var _status = MutableLiveData<Status>()
@@ -26,20 +27,25 @@ class GameRepository (private val retrofit: RetrofitApi) {
     private var pointPerQuestion: Int = 0
 
     fun setupQuestions() {
+        var requestCall: Call<List<Question>>? = null
 
-        val requestCall = when(gameMode) {
-            "easyBiology" -> retrofit.getEasyBiology()
-            "hardBiology" -> retrofit.getHardBiology()
-            else -> retrofit.getEasyBiology()
+        when(gameMode) {
+            "easyBiology" -> {
+                requestCall = retrofit.getEasyBiology()
+                pointPerQuestion = POINTS_EASY_BIOLOGY
+            }
+            "hardBiology" -> {
+                requestCall = retrofit.getHardBiology()
+                pointPerQuestion = POINTS_HARD_BIOLOGY
+            }
         }
 
-        requestCall.enqueue(object: Callback<List<Question>> {
+        requestCall?.enqueue(object: Callback<List<Question>> {
             override fun onResponse(
                 call: Call<List<Question>>,
                 response: Response<List<Question>>
             ) {
                 if(response.isSuccessful) {
-                    pointPerQuestion = POINTS_EASY_BIOLOGY
                     _earnedPoints = 0
                     _numberOfCurrentQuestion = 0
                     _currentQuestions = response.body()!!
@@ -50,7 +56,7 @@ class GameRepository (private val retrofit: RetrofitApi) {
             }
 
             override fun onFailure(call: Call<List<Question>>, t: Throwable) {
-                setErrorStatus()
+                _status.value = Status.ERROR_CANNOT_CONNECT
             }
 
         })

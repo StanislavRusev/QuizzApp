@@ -44,23 +44,41 @@ class RegisterFragment : Fragment() {
                     userViewModel.setNormalStatus()
                 }
 
-                Status.ERROR -> {
-                    invalidData()
+                Status.ERROR_USER_EXISTS -> {
+                    invalidData("User with that name already exists")
                     userViewModel.setNormalStatus()
                 }
 
+                Status.ERROR_PASSWORD_MATCH -> {
+                    invalidData("Passwords do not match")
+                    userViewModel.setNormalStatus()
+                }
+
+                Status.ERROR_NULL_FIELDS -> {
+                    invalidData("Username/password cannot be empty")
+                    userViewModel.setNormalStatus()
+                }
+
+                Status.ERROR_CANNOT_CONNECT -> {
+                    invalidData("Cannot connect to server")
+                    userViewModel.setNormalStatus()
+                }
+
+                Status.NORMAL -> {
+                    // everything is clear
+                }
+
                 else -> {
-                    // do nothing
+                    userViewModel.setNormalStatus()
                 }
             }
         }
     }
 
-    private fun invalidData() {
-        binding.username.text = null
+    private fun invalidData(error: String) {
         binding.password.text = null
         binding.confirmPassword.text = null
-        Toast.makeText(context, "Invalid Data", Toast.LENGTH_SHORT).show()
+        Toast.makeText(context, error, Toast.LENGTH_SHORT).show()
     }
 
     override fun onDestroyView() {

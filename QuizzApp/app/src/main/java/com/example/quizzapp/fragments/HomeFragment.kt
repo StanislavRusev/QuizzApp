@@ -66,12 +66,12 @@ class HomeFragment : Fragment() {
                     gameViewModel.setNormalStatus()
                 }
 
-                Status.ERROR -> {
-                    gameViewModel.setNormalStatus()
+                Status.NORMAL -> {
+                    // everything is clear
                 }
 
                 else -> {
-                    // do nothing
+                    gameViewModel.setNormalStatus()
                 }
             }
         }
@@ -81,10 +81,6 @@ class HomeFragment : Fragment() {
             when (status) {
                 Status.RECEIVED_USERS -> {
                     findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToLeaderboardFragment())
-                    userViewModel.setNormalStatus()
-                }
-
-                Status.ERROR -> {
                     userViewModel.setNormalStatus()
                 }
 
@@ -120,8 +116,12 @@ class HomeFragment : Fragment() {
                     userViewModel.removeMultiplayer()
                 }
 
+                Status.NORMAL -> {
+                    // everything is clear
+                }
+
                 else -> {
-                    // do nothing
+                    userViewModel.setNormalStatus()
                 }
             }
         }

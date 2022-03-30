@@ -29,8 +29,11 @@ class UserRepository (private val retrofit: RetrofitApi) {
     val enemyPoints get() = _enemyPoints
 
     fun registerUser(username: String, password: String, confirmPassword: String) {
-        if(password != confirmPassword || username == "" || password == "") {
-            setErrorStatus()
+        if(password != confirmPassword) {
+            _status.value = Status.ERROR_PASSWORD_MATCH
+            return
+        } else if(username == "" || password == "") {
+            _status.value = Status.ERROR_NULL_FIELDS
             return
         }
 
@@ -46,13 +49,13 @@ class UserRepository (private val retrofit: RetrofitApi) {
                 if(response.isSuccessful) {
                     setSuccessStatus()
                 } else {
-                    setErrorStatus()
+                    _status.value = Status.ERROR_USER_EXISTS
                 }
             }
 
             override fun onFailure(call: Call<Unit>, t: Throwable) {
                 println(t.toString())
-                setErrorStatus()
+                setConnectionErrorStatus()
             }
 
         })
@@ -71,13 +74,13 @@ class UserRepository (private val retrofit: RetrofitApi) {
                     _currentUser = response.body()
                     setSuccessStatus()
                 } else {
-                    setErrorStatus()
+                    _status.value = Status.ERROR_INVALID_LOGIN
                 }
             }
 
             override fun onFailure(call: Call<User>, t: Throwable) {
                 println(t.toString())
-                setErrorStatus()
+                setConnectionErrorStatus()
             }
 
         })
@@ -106,7 +109,7 @@ class UserRepository (private val retrofit: RetrofitApi) {
 
             override fun onFailure(call: Call<Unit>, t: Throwable) {
                 println(t.toString())
-                setErrorStatus()
+                setConnectionErrorStatus()
             }
 
         })
@@ -127,7 +130,7 @@ class UserRepository (private val retrofit: RetrofitApi) {
 
             override fun onFailure(call: Call<List<User>>, t: Throwable) {
                 println(t.toString())
-                setErrorStatus()
+                setConnectionErrorStatus()
             }
 
         })
@@ -147,7 +150,7 @@ class UserRepository (private val retrofit: RetrofitApi) {
             }
 
             override fun onFailure(call: Call<Unit>, t: Throwable) {
-                TODO("Not yet implemented")
+                setConnectionErrorStatus()
             }
 
         })
@@ -175,7 +178,7 @@ class UserRepository (private val retrofit: RetrofitApi) {
 
             override fun onFailure(call: Call<User>, t: Throwable) {
                 println(t.toString())
-                setErrorStatus()
+                setConnectionErrorStatus()
             }
 
         })
@@ -198,7 +201,7 @@ class UserRepository (private val retrofit: RetrofitApi) {
             }
 
             override fun onFailure(call: Call<Unit>, t: Throwable) {
-                TODO("Not yet implemented")
+                setConnectionErrorStatus()
             }
 
         })
@@ -215,11 +218,10 @@ class UserRepository (private val retrofit: RetrofitApi) {
 
         requestCall.enqueue(object: Callback<Unit> {
             override fun onResponse(call: Call<Unit>, response: Response<Unit>) {
-                println("you were removed")
             }
 
             override fun onFailure(call: Call<Unit>, t: Throwable) {
-
+                setConnectionErrorStatus()
             }
 
         })
@@ -243,7 +245,7 @@ class UserRepository (private val retrofit: RetrofitApi) {
             }
 
             override fun onFailure(call: Call<Unit>, t: Throwable) {
-
+                    setConnectionErrorStatus()
             }
 
         })
@@ -263,7 +265,7 @@ class UserRepository (private val retrofit: RetrofitApi) {
             }
 
             override fun onFailure(call: Call<Unit>, t: Throwable) {
-                TODO("Not yet implemented")
+                setConnectionErrorStatus()
             }
 
         })
@@ -285,7 +287,7 @@ class UserRepository (private val retrofit: RetrofitApi) {
             }
 
             override fun onFailure(call: Call<Int>, t: Throwable) {
-                TODO("Not yet implemented")
+                setConnectionErrorStatus()
             }
 
         })
@@ -315,5 +317,9 @@ class UserRepository (private val retrofit: RetrofitApi) {
 
     private fun setSuccessStatus() {
         _status.value = Status.SUCCESS
+    }
+
+    private fun setConnectionErrorStatus() {
+        _status.value = Status.ERROR_CANNOT_CONNECT
     }
 }
