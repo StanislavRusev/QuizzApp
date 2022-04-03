@@ -32,7 +32,7 @@ mongoClient.connect(url, function (err, db) {
         .on('end', () => {
             easyBiology.allQuestions.push(easyBiology.fullQuestion);
 
-            easyBiologyCollection.drop();
+            easyBiologyCollection.drop(function (err, res) {});
             easyBiologyCollection.insertMany(easyBiology.allQuestions, function (err, res) {
                 if (err) throw err;
                 console.log('CSV file successfully processed');
@@ -45,7 +45,7 @@ mongoClient.connect(url, function (err, db) {
         .on('end', () => {
             hardBiology.allQuestions.push(hardBiology.fullQuestion);
 
-            hardBiologyCollection.drop();
+            hardBiologyCollection.drop(function (err, res) {});
             hardBiologyCollection.insertMany(hardBiology.allQuestions, function (err, res) {
                 if (err) throw err;
                 console.log('CSV file successfully processed');
