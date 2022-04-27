@@ -85,8 +85,8 @@ class LoginFragment : Fragment() {
             }
         }
 
-        binding.loginButton.fragment = this
-        callbackManager = CallbackManager.Factory.create();
+        binding.loginButton.setFragment(this)
+        callbackManager = CallbackManager.Factory.create()
         binding.loginButton.registerCallback(callbackManager, object: FacebookCallback<LoginResult> {
             override fun onCancel() {
                 println("canceled")
