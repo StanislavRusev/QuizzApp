@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.navigation.fragment.findNavController
+import com.example.quizzapp.R
 import com.example.quizzapp.databinding.FragmentRegisterBinding
 import com.example.quizzapp.model.UserViewModel
 import com.example.quizzapp.model.Status
@@ -45,22 +46,22 @@ class RegisterFragment : Fragment() {
                 }
 
                 Status.ERROR_USER_EXISTS -> {
-                    invalidData("User with that name already exists")
+                    invalidData(getString(R.string.already_exists))
                     userViewModel.setNormalStatus()
                 }
 
                 Status.ERROR_PASSWORD_MATCH -> {
-                    invalidData("Passwords do not match")
+                    invalidData(getString(R.string.not_match_password))
                     userViewModel.setNormalStatus()
                 }
 
                 Status.ERROR_NULL_FIELDS -> {
-                    invalidData("Username/password cannot be empty")
+                    invalidData(getString(R.string.not_empty_fields))
                     userViewModel.setNormalStatus()
                 }
 
                 Status.ERROR_CANNOT_CONNECT -> {
-                    invalidData("Cannot connect to server")
+                    invalidData(getString(R.string.cannot_connect))
                     userViewModel.setNormalStatus()
                 }
 

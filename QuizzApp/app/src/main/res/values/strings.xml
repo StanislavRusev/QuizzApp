@@ -23,6 +23,8 @@
     <string name="bonus_fiftyfifty">50/50 – 2 points</string>
     <string name="cant_earn_points">You cannot earn more points today</string>
     <string name="points_leaderboard">Points: </string>
+    <string name="not_enough_points">Not enough points</string>
+    <string name="earned_points">You got %1$d points</string>
 
     <string name="gamemode_biology_easy">Biology - easy</string>
     <string name="gamemode_biology_hard">Biology - hard</string>
@@ -34,6 +36,17 @@
     <string name="loser">Loser</string>
     <string name="draw">Draw</string>
     <string name="multiplayer_result">You got %1$d points and the enemy got %2$d</string>
+
+    <string name="invalid_username">Invalid username/password</string>
+    <string name="cannot_connect">Cannot connect to server</string>
+    <string name="not_match_password">Passwords do not match</string>
+    <string name="already_exists">User with that name already exists</string>
+    <string name="not_empty_fields">Username/password cannot be empty</string>
+
+    <string name="sign_out">Sign out</string>
+    <string name="confirm_sign_out">Do you want to sign out?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
 
     <string name="facebook_app_id" translatable="false">378184364307458</string>
     <string name="fb_login_protocol_scheme" translatable="false">fb378184364307458</string>

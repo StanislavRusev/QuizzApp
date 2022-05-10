@@ -29,4 +29,15 @@
     <string name="loser">Загуба</string>
     <string name="draw">Равенство</string>
     <string name="multiplayer_result">Ти получи %1$d точки, а противникът %2$d</string>
+    <string name="not_enough_points">Няма достатъчно точки</string>
+    <string name="earned_points">Ти получи  %1$d точки</string>
+    <string name="invalid_username">Невалидно име/парола</string>
+    <string name="cannot_connect">Няма връзка със сървъра</string>
+    <string name="not_match_password">Паролите не съвпадат</string>
+    <string name="already_exists">Потребител с това име вече съществува</string>
+    <string name="not_empty_fields">Името/паролата не могат да са празни</string>
+    <string name="sign_out">Излизане</string>
+    <string name="confirm_sign_out">Искаш ли да излезеш от профила?</string>
+    <string name="yes">Да</string>
+    <string name="no">Не</string>
 </resources>

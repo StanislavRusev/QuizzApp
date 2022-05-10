@@ -66,12 +66,12 @@ class LoginFragment : Fragment() {
                 }
 
                 Status.ERROR_INVALID_LOGIN -> {
-                    invalidData("Invalid username/password")
+                    invalidData(getString(R.string.invalid_username))
                     userViewModel.setNormalStatus()
                 }
 
                 Status.ERROR_CANNOT_CONNECT -> {
-                    invalidData("Cannot connect to server")
+                    invalidData(getString(R.string.cannot_connect))
                     userViewModel.setNormalStatus()
                 }
 

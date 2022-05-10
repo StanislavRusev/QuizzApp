@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.navigation.fragment.findNavController
+import com.example.quizzapp.R
 import com.example.quizzapp.databinding.FragmentGameBinding
 import com.example.quizzapp.model.UserViewModel
 import com.example.quizzapp.model.GameViewModel
@@ -167,7 +168,7 @@ class GameFragment : Fragment() {
             return
         }
         if(userViewModel.currentUser?.points!! < 1) {
-            Toast.makeText(context, "Not enough points", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, getString(R.string.not_enough_points), Toast.LENGTH_SHORT).show()
         } else {
             userViewModel.updatePoints(-1)
             countDownTimer.cancel()
@@ -182,7 +183,7 @@ class GameFragment : Fragment() {
             return
         }
         if(userViewModel.currentUser?.points!! < 2) {
-            Toast.makeText(context, "Not enough points", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, getString(R.string.not_enough_points), Toast.LENGTH_SHORT).show()
         } else {
             userViewModel.updatePoints(-2)
             val questionsToHide = gameViewModel.getBonusFiftyFifty()
@@ -203,7 +204,7 @@ class GameFragment : Fragment() {
     }
 
     private fun finishGame() {
-        Toast.makeText(context, "You got " + gameViewModel.earnedPoints + " points", Toast.LENGTH_SHORT).show()
+        Toast.makeText(context, getString(R.string.earned_points, gameViewModel.earnedPoints), Toast.LENGTH_SHORT).show()
         if(canEarnPoints) {
             userViewModel.updatePoints(gameViewModel.earnedPoints)
         }

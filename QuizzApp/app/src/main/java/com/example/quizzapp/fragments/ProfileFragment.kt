@@ -46,12 +46,12 @@ class ProfileFragment : Fragment() {
 
     private fun signOutConfirmation() {
         val builder = AlertDialog.Builder(context)
-        builder.setTitle("Sign out")
-        builder.setMessage("Do you want to sign out?")
-        builder.setPositiveButton("Yes") { _: DialogInterface, _: Int ->
+        builder.setTitle(getString(R.string.sign_out))
+        builder.setMessage(getString(R.string.confirm_sign_out))
+        builder.setPositiveButton(getString(R.string.yes)) { _: DialogInterface, _: Int ->
             signOut()
         }
-        builder.setNegativeButton("No") { _: DialogInterface, _: Int -> }
+        builder.setNegativeButton(getString(R.string.no)) { _: DialogInterface, _: Int -> }
         builder.show()
     }
 
