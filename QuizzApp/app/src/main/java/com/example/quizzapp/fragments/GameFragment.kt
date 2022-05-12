@@ -1,5 +1,6 @@
 package com.example.quizzapp.fragments
 
+import android.content.pm.ActivityInfo
 import android.graphics.Color
 import android.os.Bundle
 import android.os.CountDownTimer
@@ -38,6 +39,16 @@ class GameFragment : Fragment() {
     ): View? {
         _binding = FragmentGameBinding.inflate(inflater, container, false)
         return binding.root
+    }
+
+    override fun onResume() {
+        super.onResume()
+        activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+    }
+
+    override fun onPause() {
+        super.onPause()
+        activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
