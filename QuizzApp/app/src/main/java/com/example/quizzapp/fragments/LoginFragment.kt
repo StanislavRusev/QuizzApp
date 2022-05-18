@@ -85,9 +85,19 @@ class LoginFragment : Fragment() {
             }
         }
 
-        binding.loginButton.setFragment(this)
+        binding.facebookLogin.setOnClickListener {
+            binding.facebookButton.callOnClick()
+        }
+
+        binding.googleLogin.setOnClickListener {
+            val signInIntent = mGoogleSignInClient.signInIntent
+            startActivityForResult(signInIntent, RC_GOOGLE)
+        }
+
+
+        binding.facebookButton.setFragment(this)
         callbackManager = CallbackManager.Factory.create()
-        binding.loginButton.registerCallback(callbackManager, object: FacebookCallback<LoginResult> {
+        binding.facebookButton.registerCallback(callbackManager, object: FacebookCallback<LoginResult> {
             override fun onCancel() {
                 println("canceled")
             }
@@ -119,16 +129,6 @@ class LoginFragment : Fragment() {
             .build()
 
         mGoogleSignInClient = GoogleSignIn.getClient(requireActivity(), gso)
-
-        val textView: TextView = binding.googleButton.getChildAt(0) as TextView
-        textView.text = getString(R.string.google)
-        textView.textSize = 16F
-        textView.setPadding(0, 0, 0, 0)
-        binding.googleButton.setOnClickListener {
-            val signInIntent = mGoogleSignInClient.signInIntent
-            startActivityForResult(signInIntent, RC_GOOGLE)
-
-        }
 
     }
 

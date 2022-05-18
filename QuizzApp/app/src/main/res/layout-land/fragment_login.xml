@@ -24,8 +24,8 @@
         android:id="@+id/username"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
         android:layout_marginLeft="20dp"
+        android:layout_marginTop="10dp"
         android:layout_marginRight="20dp"
         android:ems="10"
         android:hint="@string/username"
@@ -34,7 +34,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintTop_toBottomOf="@+id/textView"
+        tools:ignore="TouchTargetSizeCheck" />
 
     <EditText
         android:id="@+id/password"
@@ -60,7 +61,8 @@
         android:layout_marginStart="20dp"
         android:text="@string/login"
         android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/login_button"
+        app:layout_constraintBottom_toTopOf="@+id/facebook_button"
+        android:layout_marginTop="8dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/password"
         app:layout_constraintWidth_default="percent"
@@ -80,7 +82,7 @@
         app:layout_constraintWidth_percent=".45" />
 
     <com.facebook.login.widget.LoginButton
-        android:id="@+id/login_button"
+        android:id="@+id/facebook_button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
@@ -91,15 +93,32 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/buttonReg"
         app:layout_constraintWidth_default="percent"
-        app:layout_constraintWidth_percent=".45" />
+        app:layout_constraintWidth_percent=".45"
+        android:visibility="gone"/>
 
-    <com.google.android.gms.common.SignInButton
-        android:id="@+id/google_button"
+    <Button
+        android:id="@+id/facebook_login"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginEnd="16dp"
+        android:textSize="17sp"
         android:layout_marginTop="8dp"
+        android:layout_marginStart="20dp"
+        android:text="@string/facebook"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonReg"
+        app:layout_constraintWidth_default="percent"
+        app:layout_constraintWidth_percent=".45" />
+
+    <Button
+        android:id="@+id/google_login"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/google"
+        android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/buttonReg"
         app:layout_constraintWidth_default="percent"
