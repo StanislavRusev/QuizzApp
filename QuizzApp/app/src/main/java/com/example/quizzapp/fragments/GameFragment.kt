@@ -28,9 +28,11 @@ class GameFragment : Fragment() {
     private lateinit var countDownTimer: CountDownTimer
     private var timeLeftInMillis: Long = COUNTDOWN
     private var canEarnPoints: Boolean = true
-    private val runnable = Runnable { setupQuestion() }
+    private val setupQuestionRunnable = Runnable { setupQuestion() }
+    private val finishGameRunnable = Runnable { lastQuestionAnswered() }
     private val handler = Handler(Looper.getMainLooper())
     private var canAnswer = true
+    private var shouldChange = false
 
 
     override fun onCreateView(
@@ -44,6 +46,10 @@ class GameFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        if(shouldChange) {
+            shouldChange = false
+            findNavController().navigate(GameFragmentDirections.actionGameFragmentToHomeFragment())
+        }
     }
 
     override fun onPause() {
@@ -55,6 +61,7 @@ class GameFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         userViewModel.updateLastPlayed()
         canEarnPoints = userViewModel.canEarnPoints()
+        binding.currentPoints.text = getString(R.string.points_profile, userViewModel.currentUser?.points)
         setupQuestion()
         if(canEarnPoints) {
             binding.pointsHint.visibility = View.INVISIBLE
@@ -96,7 +103,7 @@ class GameFragment : Fragment() {
             gameViewModel.gameType = "singleplayer"
             userViewModel.finishMultiplayer(0)
         }
-        handler.removeCallbacks(runnable)
+        handler.removeCallbacksAndMessages(null)
     }
 
     private fun chooseAnswer(answer: String) {
@@ -113,14 +120,19 @@ class GameFragment : Fragment() {
             colorAnswers(gameViewModel.getRightAnswer(), Color.GREEN)
         }
 
+        countDownTimer.cancel()
+
         if(!gameViewModel.toNextQuestion()) {
-            finishGame()
-            findNavController().navigate(GameFragmentDirections.actionGameFragmentToHomeFragment())
+            handler.postDelayed(finishGameRunnable, 2000)
             return
         }
 
-        countDownTimer.cancel()
-        handler.postDelayed(runnable, 2000)
+        handler.postDelayed(setupQuestionRunnable, 2000)
+    }
+
+    private fun lastQuestionAnswered() {
+        finishGame()
+        findNavController().navigate(GameFragmentDirections.actionGameFragmentToHomeFragment())
     }
 
     private fun setupQuestion() {
@@ -158,6 +170,7 @@ class GameFragment : Fragment() {
                 if(!gameViewModel.toNextQuestion()) {
                     finishGame()
                     findNavController().navigate(GameFragmentDirections.actionGameFragmentToHomeFragment())
+                    shouldChange = true
                     return
                 }
                 setupQuestion()
@@ -181,6 +194,7 @@ class GameFragment : Fragment() {
         if(userViewModel.currentUser?.points!! < 1) {
             Toast.makeText(context, getString(R.string.not_enough_points), Toast.LENGTH_SHORT).show()
         } else {
+            binding.currentPoints.text = getString(R.string.points_profile, userViewModel.currentUser?.points!! - 1)
             userViewModel.updatePoints(-1)
             countDownTimer.cancel()
             timeLeftInMillis += COUNTDOWN
@@ -196,6 +210,7 @@ class GameFragment : Fragment() {
         if(userViewModel.currentUser?.points!! < 2) {
             Toast.makeText(context, getString(R.string.not_enough_points), Toast.LENGTH_SHORT).show()
         } else {
+            binding.currentPoints.text = getString(R.string.points_profile, userViewModel.currentUser?.points!! - 2)
             userViewModel.updatePoints(-2)
             val questionsToHide = gameViewModel.getBonusFiftyFifty()
             hideWrongAnswer(questionsToHide[0])

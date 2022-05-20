@@ -48,6 +48,8 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
 
+    <string name="pick_a_gamemode">Pick a mode to play</string>
+
     <string name="facebook_app_id" translatable="false">378184364307458</string>
     <string name="fb_login_protocol_scheme" translatable="false">fb378184364307458</string>
     <string name="facebook_client_token" translatable="false"></string>

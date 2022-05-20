@@ -17,7 +17,7 @@
     <string name="welcome">Добре дошли в QuizzApp</string>
     <string name="bonus_time">Добави 20 секунди - 1 точка</string>
     <string name="bonus_fiftyfifty">50/50 - 2 точки</string>
-    <string name="cant_earn_points">Не може да се печелят повече точки днес</string>
+    <string name="cant_earn_points">Не можеш да печелиш повече точки</string>
     <string name="confirm_password">Повтори паролата</string>
     <string name="points_leaderboard">"Точки: "</string>
     <string name="gamemode_biology_easy">Биология - лесно</string>
@@ -40,4 +40,5 @@
     <string name="confirm_sign_out">Искаш ли да излезеш от профила?</string>
     <string name="yes">Да</string>
     <string name="no">Не</string>
+    <string name="pick_a_gamemode">Изберете тема за игра</string>
 </resources>

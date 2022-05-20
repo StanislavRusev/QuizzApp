@@ -139,7 +139,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun gameModeDialogBuilder() {
-        val dialog = Dialog(requireContext())
+        val dialog = Dialog(requireContext(), android.R.style.Theme_Light_NoTitleBar_Fullscreen)
         dialog.setContentView(R.layout.pick_gamemode)
         dialog.findViewById<Button>(R.id.easyBiology).setOnClickListener {
             setupQuestions(dialog, "easyBiology")
